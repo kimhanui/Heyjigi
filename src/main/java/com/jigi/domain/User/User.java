@@ -3,6 +3,7 @@ package com.jigi.domain.User;
 import com.jigi.domain.BaseEntity;
 import com.jigi.domain.Category.CategoryEnum;
 import com.jigi.domain.Post.Post;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,13 +12,23 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
 public class User extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column
+    private String oauthId; //oauth
+
+    @Column
+    private String providerName;
+
+    @Column
+    private String accessToken;
+
     @Column(nullable = false, length = 10)
     private String name;
 
@@ -46,5 +57,12 @@ public class User extends BaseEntity {
         this.name = name;
         this.contact = contact;
         this.studentId = studentId;
+    }
+    public User(String oauthId, String name, String providerName, String accessToken) {
+
+        this.oauthId = oauthId;
+        this.name = name;
+        this.providerName = providerName;
+        this.accessToken = accessToken;
     }
 }

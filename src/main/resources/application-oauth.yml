@@ -1,0 +1,2 @@
+spring.security.oauth2.client.registration.kakao.client-id: c3fd7ee121c229e092ecaf7a67960298
+spring.security.oauth2.client.registration.kakao.client-secret: 95i43gMteAlEXkkZvjKKyADCvsNvwkd7

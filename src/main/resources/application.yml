@@ -3,10 +3,11 @@ spring:
     active: local
 
 ---
-spring:
-  profiles: local
+spring.profiles: local
+spring.profiles.include: oauth
 
   # hikari
+spring:
   datasource:
     platform: h2
     hikari:

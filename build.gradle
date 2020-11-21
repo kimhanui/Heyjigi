@@ -32,13 +32,15 @@ repositories {
 }
 
 dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
     compile('org.springframework.boot:spring-boot-starter-web')
-    compile('org.projectlombok:lombok')
     compile('org.springframework.boot:spring-boot-starter-data-jpa')
     compile('org.springframework.boot:spring-boot-starter-mustache')
+    compile('org.springframework.boot:spring-boot-starter-oauth2-client')
     compile('com.h2database:h2')
+    compile('org.projectlombok:lombok')
 
-//    compile('org.springframework.boot:spring-boot-starter-oauth2-client')
-//    compile('org.springframework.session:spring-session-jdbc')
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
