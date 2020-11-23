@@ -12,12 +12,14 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Transactional
 @Log
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -41,7 +43,7 @@ public class PostServiceTest {
         User user= userRequestDto.toEntity();
         userRepository.save(user);
 
-        String title="스터디팀원구합니다";
+        String title="java의세계로";
         PostRequestDto postRequestDto = PostRequestDto.builder()
                 .title(title)
                 .content("오세요")
@@ -57,8 +59,10 @@ public class PostServiceTest {
         //then
         List<PostListResponseDto> list = postService.findPostsByCategory("STUDY");
         log.info("사이즈:"+list.size());
-        assertThat(list.get(0).getTitle()).isEqualTo(title);
+        assertThat(list.stream().anyMatch(postListResponseDto
+                -> postListResponseDto.getTitle().equals(title))).isEqualTo(true);
     }
+
     @Test
     public void 카테고리로_Post_조회(){
         //given
@@ -86,6 +90,7 @@ public class PostServiceTest {
 
         //then
         log.info("사이즈:"+list.size());
-        assertThat(list.get(0).getTitle()).isEqualTo(title);
+        assertThat(list.stream().anyMatch(postListResponseDto
+                -> postListResponseDto.getTitle().equals(title))).isEqualTo(true);
     }
 }

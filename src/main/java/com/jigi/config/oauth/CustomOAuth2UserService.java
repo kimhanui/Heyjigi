@@ -27,7 +27,10 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
-
+/**
+ * 이 클래스에서는 구글 로그인 이후 가져온 사용자의
+ * 정보(email,name,picture등) 들을 기반으로
+ * 가입 및 정보수정, 세션 저장 등의 기능을 지원합니다.*/
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private static final String MISSING_USER_INFO_URI_ERROR_CODE = "missing_user_info_uri";
     private static final String MISSING_USER_NAME_ATTRIBUTE_ERROR_CODE = "missing_user_name_attribute";

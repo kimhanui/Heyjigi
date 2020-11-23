@@ -40,7 +40,7 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-oauth2-client')
     compile('com.h2database:h2')
     compile('org.projectlombok:lombok')
-
-    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.10'
+    
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }

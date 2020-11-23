@@ -9,11 +9,20 @@
             </div>
             <div class="form-group">
                 <label for="endDate">모집 종료일</label>
-                <input type="text" class="form-control" id="title" placeholder="제목을 입력하세요">
+                <input type="text" class="form-control" id="endDate" placeholder="제목을 입력하세요">
+            </div>
+            <div class="form-group">
+                카테고리
+                <br>
+                <input type="radio" name="rawCategoryEnum" value="arduino" checked>아두이노 부품 공구</label>
+                <input type="radio" name="rawCategoryEnum" value="sports">축구/족구</label>
+                <input type="radio" name="rawCategoryEnum" value="exhibition">코엑스 전시회</label>
+                <input type="radio" name="rawCategoryEnum" value="study">공모전 참여</label>
+
             </div>
             <div class="form-group">
                 <label for="personLimit">머릿수</label>
-                <input type="text" class="form-control" id="title" placeholder="제목을 입력하세요">
+                <input type="text" class="form-control" id="personLimit" placeholder="제목을 입력하세요">
             </div>
             <div class="form-group">
                 <label for="author">작성자</label>
@@ -23,9 +32,55 @@
                 <label for="content">내용</label>
                 <textarea class="form-control" id="content" placeholder="내용을 입력하세요."></textarea>
             </div>
+            <!--<input type="hidden" name="{{!--csrf.parameterName--}}" value="{{!--csrf.token--}}"/>-->
+
         </form>
         <a href="/" role="button" class="btn btn-secondary">취소</a>
         <button type="button" class="btn btn-primary" id="btn-save">등록</button>
     </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        console.log("init한다.");
+        console.log($('input[type=hidden]').attr('name')+", "+$('input[type=hidden]').attr('value'));
+        $('#btn-save').on('click', function () {
+            console.log("버튼 누름");
+            save();
+        });
+
+
+        save = function () {
+            var checked = $('input[name="rawCategoryEnum"]:checked').val();
+            var data = {
+                title: $('#title').val(),
+                endDate: $('#endDate').val(),
+                personLimit: $('#personLimit').val(),
+                rawCategoryEnum: checked,
+                content: $('#content').val(),
+                studentId: '170170'
+            };
+
+            $.ajax({
+                type: 'POST',
+                url: '/api/v1/post',
+                dataType: 'json', //서버측에서 전송받은 데이터 타입
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
+                    success: function (response) {
+                    alert('글이 등록되었습니다.');
+                    window.location.href = '/'; //js에서 url로 페이지 이동방법(cf. 페이지 이름으로 이동)
+
+                }, error: function (error) {
+                    alert(JSON.parse(error));
+
+                }
+            })
+        }
+    });
+
+
+</script>
 {{>layout/footer}}

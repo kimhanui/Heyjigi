@@ -5,8 +5,7 @@
 </span>
 <div class="col-md-12">
     <div class="col-md-4">
-
-        {{#my}}
+        {{#user}}
             <div class="form-group">
                 <label for="profile">내 정보</label>
                 <input style="background-color: darkseagreen;" type="text" class="form-control"
@@ -16,6 +15,8 @@
                 <input style="background-color: cadetblue;" type="text" class="form-control"
                        value="{{studentId}}" readonly>
             </div>
+        {{/user}}
+        {{#my}}
             <div class="form-group">
                 <label for="my-host">내가 lead하는 모임</label>
 

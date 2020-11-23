@@ -17,19 +17,23 @@ import java.util.List;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // disables cors and csrf
         http
-                .cors().and()
-                .csrf()
-                .disable();
+                .cors().disable()
+                .csrf().disable()
+//                .and()
+                .headers().frameOptions().disable();
 
         http.authorizeRequests()
-                .antMatchers("/", "/oauth2/**", "/login/**", "/css/**", "/images/**", "/js/**", "/console/**", "/favicon.ico/**").permitAll()//url관리리
-                .antMatchers("/kakao").hasAuthority("ROLE_USER")
+                .antMatchers("/my/**").hasAnyRole()
+                .antMatchers("/**").permitAll()//, "/oauth2/**", "/login/**","/css/**", "/images/**", "/js/**", "/h2-console/**", "/favicon.ico").permitAll()//url관리
+                .antMatchers("/kakao").hasRole("USER")
                 .anyRequest().authenticated()
                 .and()
+
                 .oauth2Login();
 //                .userInfoEndpoint().userService(new CustomOAuth2UserService())
 //                .and()
@@ -53,8 +57,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         return new InMemoryClientRegistrationRepository(registrations);
     }
-
-//    private ClientRegistration getRegistration(OAuth2ClientProperties clientProperties, String client) {
-//        return null;
-//    }
 }

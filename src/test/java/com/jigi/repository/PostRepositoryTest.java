@@ -29,6 +29,9 @@ public class PostRepositoryTest {
         List<Post> list = postRepository.findAllByCategoryEnumDesc(CategoryEnum.ARDUINO);
 
         //then
-        assertThat(list.get(0).getTitle()).isEqualTo("부품공구합시다");
+        for (int i=0;i<list.size();i++) {
+            assertThat(list.get(i).getCategoryEnum()).isEqualTo(CategoryEnum.ARDUINO);
+
+        }
     }
 }

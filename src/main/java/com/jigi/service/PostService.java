@@ -13,6 +13,7 @@ import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,15 +26,16 @@ public class PostService {
     private final UserRepository userRepository;
 
     @Transactional
-    public void insert(PostRequestDto postRequestDto)throws IllegalArgumentException{
+    public Long insert(PostRequestDto postRequestDto)throws IllegalArgumentException{
         Post post = postRequestDto.toEntity();
 
-
-        log.info("제목:"+ postRequestDto.getTitle());
-
         User host = userRepository.findByStudentId(postRequestDto.getStudentId()).orElseThrow(()->new IllegalArgumentException("유효하지 않는 회원입니다."));
+        log.info("user찾음");
+
         post.setHost(host);
-        postRepository.save(post);
+        log.info("user set");
+
+        return postRepository.save(post).getId();
     }
 
     @Transactional(readOnly = true)

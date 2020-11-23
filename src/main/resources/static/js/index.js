@@ -1,6 +1,11 @@
 var main = {
+
     init: function () {
+        console.log("init한다.");
         var _this = this;//객체의 메소드안에서 사용된 this는 해당 메소드를 호출한 객체에 바인딩된다. (즉 main을 호출한 객체가됨)
+        $('#btn-list').on('click', function(){
+            _this.list();
+        })
         $('#btn-save').on('click', function () {
             _this.save();
         });
@@ -13,7 +18,25 @@ var main = {
             _this.delete();
         })
     },
+    list: function () {
+        console.log("list function!");
+        var cat_id = this.name;
+        cat_id = cat_id.split('-')[1]; //카테고리 이름 가져오기
+        console.log("cat_id=" + cat_id);
 
+        $.ajax({
+            type: 'GET',
+            url: 'api/v1/post/list/' + cat_id,
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8'
+            // data: JSON.stringify(data)
+        }).done(function(response) {
+            alert(JSON.parse(response));
+        }).fail(function (error) {
+                alert(JSON.stringify(error));
+        })
+
+    },
     save: function () {
         var data = {
             title: $('#title').val(),
@@ -69,4 +92,5 @@ var main = {
         });
     }
 };
+console.log("index.js로드 됨.");
 main.init();

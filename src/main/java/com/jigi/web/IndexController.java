@@ -18,35 +18,36 @@ import java.util.List;
 @RequiredArgsConstructor
 @Controller
 public class IndexController {
-
     private final PostService postService;
     private final UserService userService;
 
     @GetMapping("/")
-    public String home(Model model){ //서버 템플릿엔진(mustache)에서 사용가능한 객체 저장,전달
+    public String home(Model model) { //서버 템플릿엔진(mustache)에서 사용가능한 객체 저장,전달
         List<PostListResponseDto> list = postService.findPostsByCategory("arduino");
         model.addAttribute("posts", list);
-        log.info("personNow: "+list.get(0).getPersonNow());
+        log.info("post list size=" + list.size());
         return "home";
     }
 
 
     @GetMapping("/post/find/{id}")
-    public String post_find(@PathVariable Long id,  Model model){
+    public String post_find(@PathVariable Long id, Model model) {
         PostResponseDto postResponseDto = postService.find(id);
         model.addAttribute("post", postResponseDto);
         return "post-find";
     }
+
     @GetMapping("/post/save")
-    public String post_save( Model model){
+    public String post_save(Model model) {
         return "post-save";
     }
+
     @GetMapping("/my/{studentId}")
-    public String mypage(@PathVariable Long studentId, Model model){
+    public String mypage(@PathVariable Long studentId, Model model) {
         //내 계정 정보필요
         MyResponseDto myResponseDto = userService.findMyInfo(studentId);
         log.info(myResponseDto.toString());
-        model.addAttribute("my",myResponseDto);
+        model.addAttribute("my", myResponseDto);
         return "my";
     }
 }

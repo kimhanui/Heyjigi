@@ -2,13 +2,19 @@
 <html>
 <head>
     <title>Hey Jigi</title>
-    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
 
+    <!--<meta name="_csrf" content="{{!--csrf.token--}}">-->
+    <!--<meta name="_csrf_header" content="{{!--csrf.headerName--}}">-->
+
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <!--페이지 로딩 속도를 높이기 위해 css는 header(화면깨짐방지+꼭 필요함)에 js는 footer(무거우면 느려서 백지 노출)에 둠-->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
     <!--나눔명조(경로: /static이 기본임)-->
     <link href="https://fonts.googleapis.com/css?family=Nanum+Gothic|Nanum+Myeongjo&display=swap&subset=korean" rel="stylesheet">
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+    <!--<link href="/css/style.css" rel="stylesheet" >-->
     <!--Kakao Login JavaScript SDK-->
     <script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
 </head>
