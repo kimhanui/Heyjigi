@@ -17,6 +17,7 @@ public enum CustomOAuth2Provider {
             builder.userInfoUri("https://kapi.kakao.com/v2/user/me");
             builder.userNameAttributeName("id");
             builder.clientName("Kakao");
+            builder.scope("account_email");
             return builder;
         }
     };

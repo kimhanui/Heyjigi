@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
 
-    @Query("select p from Post p where p.categoryEnum = :category order by p.endDate DESC, p.id DESC ")
-    List<Post> findAllByCategoryEnumDesc(@Param("category") CategoryEnum category);
+    @Query("select p from Post p Join p.category c where  c.categoryEnum = :categoryEnum order by p.endDate DESC, p.id DESC ")
+    List<Post> findAllByCategoryEnumDesc(@Param("categoryEnum") CategoryEnum categoryEnum);
 }

@@ -4,26 +4,31 @@ import com.jigi.domain.User.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
+@ToString
 @NoArgsConstructor
 @Getter
 public class UserRequestDto {
-    private Long studentId;
+    private String oauthId;
     private String name;
-    private String contact;
+    private Long studentId;
+    private String email;
 
     public User toEntity() {
         return User.builder()
                 .studentId(studentId)
+                .email(email)
                 .name(name)
-                .contact(contact)
+                .oauthId(oauthId)
                 .build();
     }
 
     @Builder
-    public UserRequestDto(Long studentId, String name, String contact) {
-        this.studentId = studentId;
+    public UserRequestDto(Long studentId, String email, String name, String oauthId) {
         this.name = name;
-        this.contact = contact;
+        this.oauthId =oauthId;
+        this.studentId = studentId;
+        this.email = email;
     }
 }

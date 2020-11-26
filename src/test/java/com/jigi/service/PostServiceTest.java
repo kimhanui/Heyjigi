@@ -1,15 +1,19 @@
 package com.jigi.service;
 
+import com.jigi.domain.Category.Category;
 import com.jigi.domain.Category.CategoryEnum;
+import com.jigi.domain.Category.CategoryRepository;
 import com.jigi.domain.Post.Post;
 import com.jigi.domain.Post.PostRepository;
 import com.jigi.domain.User.User;
 import com.jigi.domain.User.UserRepository;
 import com.jigi.web.dto.*;
 import lombok.extern.java.Log;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,20 +29,23 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 public class PostServiceTest {
     @Autowired
+    private CategoryRepository categoryRepository;
+    @Autowired
     private PostService postService;
     @Autowired
     private PostRepository postRepository;
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private UserService userService;
+
     @Test
     public void Post_저장한다(){
         //given
+        String oauthId = "1500000011";
         UserRequestDto userRequestDto = UserRequestDto.builder()
-                .studentId(100100L)
+                .studentId(123123L)
                 .name("test")
-                .contact("test")
+                .email("test")
+                .oauthId(oauthId)
                 .build();
         User user= userRequestDto.toEntity();
         userRepository.save(user);
@@ -50,11 +57,10 @@ public class PostServiceTest {
                 .endDate(LocalDate.of(2020,11,30))
                 .personLimit(5)
                 .rawCategoryEnum("STUDY")
-                .studentId(100100L)
+                .studentId(123123L)
                 .build();
-
         //when
-        postService.insert(postRequestDto);
+        postService.insert(postRequestDto, oauthId);
 
         //then
         List<PostListResponseDto> list = postService.findPostsByCategory("STUDY");
@@ -69,18 +75,19 @@ public class PostServiceTest {
         UserRequestDto userRequestDto = UserRequestDto.builder()
                 .studentId(100100L)
                 .name("test")
-                .contact("test")
+                .email("test")
                 .build();
         User user= userRequestDto.toEntity();
         userRepository.save(user);
 
+        Category category = categoryRepository.findByCategoryEnum(CategoryEnum.STUDY);
         String title="스터디팀원구합니다";
         Post post = Post.builder()
                 .title(title)
                 .content("오세요")
                 .endDate(LocalDate.of(2020,11,30))
                 .personLimit(5)
-                .categoryEnum(CategoryEnum.STUDY)
+                .category(category)
                 .host(user)
                 .build();
         postRepository.save(post);

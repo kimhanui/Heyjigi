@@ -13,6 +13,7 @@ public class HostedListDto {
     private String title;
     private int personLimit;
     private int personNow;
+    private String author;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd",timezone="Asia/Seoul")
     private LocalDate endDate;
     private List<UserResponseDto> participants;

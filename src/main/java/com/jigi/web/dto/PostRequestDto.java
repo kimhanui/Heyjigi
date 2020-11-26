@@ -1,5 +1,6 @@
 package com.jigi.web.dto;
 
+import com.jigi.domain.Category.Category;
 import com.jigi.domain.Category.CategoryEnum;
 import com.jigi.domain.Post.Post;
 import lombok.Builder;
@@ -10,6 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
+@ToString
 @NoArgsConstructor
 @Getter
 public class PostRequestDto {
@@ -19,15 +21,14 @@ public class PostRequestDto {
     private LocalDate endDate;
     private int personLimit;
     private String rawCategoryEnum;
-    private Long studentId; //host정보
 
-    public Post toEntity() {
+    public Post toEntity(Category category) {
         return Post.builder()
                 .title(title)
                 .content(content)
                 .endDate(endDate)
                 .personLimit(personLimit)
-                .categoryEnum(CategoryEnum.valueOf(rawCategoryEnum.toUpperCase()))
+                .category(category)
                 .build();
     }
 
@@ -39,6 +40,5 @@ public class PostRequestDto {
         this.endDate = LocalDate.of(endDate.getYear(), endDate.getMonth(), endDate.getDayOfMonth());
         this.personLimit = personLimit;
         this.rawCategoryEnum = rawCategoryEnum;
-        this.studentId = studentId;
     }
 }

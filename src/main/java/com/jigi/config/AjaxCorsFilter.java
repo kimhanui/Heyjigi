@@ -1,4 +1,4 @@
-package com.jigi.config.oauth;
+package com.jigi.config;
 
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;

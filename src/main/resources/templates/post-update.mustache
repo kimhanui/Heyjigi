@@ -1,16 +1,16 @@
 {{>layout/header}}
-<h1>모임 등록</h1>
+<h1>내 모임 수정</h1>
 <div class="col-md-12">
     <div class="col-md-4">
         <form>
-            {{#sessionUser}}
+            {{#post}}
                 <div class="form-group">
                     <label for="title">제목</label>
-                    <input type="text" class="form-control" id="title" placeholder="제목을 입력하세요" required>
+                    <input type="text" class="form-control" id="title" value="{{title}}">
                 </div>
                 <div class="form-group">
                     <label for="endDate">모집 종료일</label>
-                    <input type="text" class="form-control" id="endDate" placeholder="ex) 2020-11-24" required>
+                    <input type="text" class="form-control" id="endDate" value="{{endDate}}">
                 </div>
                 <div class="form-group">
                     카테고리
@@ -23,19 +23,19 @@
                 </div>
                 <div class="form-group">
                     <label for="personLimit">머릿수</label>
-                    <input type="text" class="form-control" id="personLimit" placeholder="ex) 3" required>
+                    <input type="text" class="form-control" id="personLimit" value="{{personLimit}}">
                 </div>
                 <div class="form-group">
                     <label for="author">작성자</label>
-                    <input type="text" class="form-control" value="{{name}}" readonly>
+                    <input type="text" class="form-control" value="{{author}}" readonly>
                 </div>
                 <div class="form-group">
                     <label for="content">내용</label>
-                    <textarea class="form-control" id="content" placeholder="내용을 입력하세요."></textarea>
+                    <textarea class="form-control" id="content" placeholder="{{content}}"></textarea>
                 </div>
-            {{/sessionUser}}
-            <a href="/" role="button" class="btn btn-secondary">취소</a>
-            <button type="button" class="btn btn-primary" id="btn-save">등록</button>
+            {{/post}}
+            <a href="/my" role="button" class="btn btn-secondary">취소</a>
+            <button type="button" class="btn btn-primary" id="btn-update">수정</button>
         </form>
     </div>
 </div>
@@ -45,17 +45,26 @@
 <script type="text/javascript">
     $(document).ready(function () {
         console.log("init한다.");
-        console.log($('input[type=hidden]').attr('name') + ", " + $('input[type=hidden]').attr('value'));
-        $('#btn-save').on('click', function () {
-            console.log("버튼 누름");
-            if ($('#title').val() == ''||  $('#endDate').val()==''||
-                    $('#personLimit').val()=='' || $('#content').val()=='') {
-                alert("모든 항목을 채워주세요");
+
+        var cat = {{post.rawCategoryEnum}}.toString();
+        console.log("post.category=" + cat);
+        $('input[type="radio"]').each(function (index, item) {
+            console.log("item:" + $(item).val());
+            if ($(item).val() == cat) {
+                $(item).prop('checked', true);
             }
-            else save();
         });
 
-        save = function () {
+
+        $('#btn-update').on('click', function () {
+            console.log("버튼 누름");
+            if ($('#title').val() == '' || $('#endDate').val() == '' ||
+                    $('#personLimit').val() == '' || $('#content').val() == '') {
+                alert("모든 항목을 채워주세요");
+            } else update();
+        });
+
+        update = function () {
             var checked = $('input[name="rawCategoryEnum"]:checked').val();
 
             var data = {
@@ -67,15 +76,13 @@
             };
 
             $.ajax({
-                type: 'POST',
-                url: '/api/v1/post',
+                type: 'PUT',
+                url: '/api/v1/post/' +{{post.id}},
                 dataType: 'json', //서버측에서 전송받은 데이터 타입
                 contentType: 'application/json; charset=utf-8',
                 data: JSON.stringify(data),
                 success: function (response) {
-                    alert('글이 등록되었습니다.');
-                    window.location.href = '/'; //js에서 url로 페이지 이동방법(cf. 페이지 이름으로 이동)
-
+                    alert('글이 수정되었습니다.');
                 }, error: function (error) {
                     alert('날짜 형식은 "20xx-xx-xx", 인원은 숫자만 적어주세요')
                 }

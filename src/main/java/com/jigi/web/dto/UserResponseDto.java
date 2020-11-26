@@ -5,15 +5,17 @@ import lombok.Getter;
 
 @Getter
 public class UserResponseDto {
-
+    private String oauthId;
     private Long studentId;
     private String name;
-    private String contact;
-    
+    private String email;
+
     public UserResponseDto(User user){
+        this.oauthId = user.getOauthId();
         this.studentId = user.getStudentId();
         this.name = user.getName();
-        this.contact= user.getContact();
+        this.email= user.getEmail();
+//        this.accessToken = user.getAccessToken();
     }
 
 }

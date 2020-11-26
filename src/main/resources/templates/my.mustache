@@ -5,20 +5,28 @@
 </span>
 <div class="col-md-12">
     <div class="col-md-4">
-        {{#user}}
-            <div class="form-group">
-                <label for="profile">내 정보</label>
-                <input style="background-color: darkseagreen;" type="text" class="form-control"
-                       value="{{name}}" readonly>
-                <input style="background-color: aquamarine;" type="text" class="form-control"
-                       value="{{contact}}" readonly>
-                <input style="background-color: cadetblue;" type="text" class="form-control"
-                       value="{{studentId}}" readonly>
-            </div>
-        {{/user}}
         {{#my}}
             <div class="form-group">
-                <label for="my-host">내가 lead하는 모임</label>
+                <label for="profile">내 정보</label>
+                <br>프로필 이미지
+                <img style="width:150px; length:150px;" src="{{profile_image}}"/>
+                <br>
+                <br>oauthId: <input class="my-info" id="oauthId" style="background-color: cadetblue;" type="text" class="form-control"
+                                    value="{{oauthId}}" readonly>
+                <br>이름:<input class="my-info" id="name" style="background-color: darkseagreen;" type="text"
+                              class="form-control"
+                              value="{{name}}" readonly>
+                <br>이메일:<input class="my-info" id="email" style="background-color: aquamarine;" type="text"
+                               class="form-control"
+                               value="{{email}}">
+                <br>학번:<input class="my-info" id="studentId" style="background-color: aquamarine;" type="text"
+                              class="form-control"
+                              value="{{studentId}}">
+
+                <button id="btn-my-update">학번 수정</button>
+            </div>
+            <div class="form-group">
+                <label for="my-host"><h2>내가 lead하는 모임</h2></label>
 
                 <table class="table table-horizontal table-bordered">
                     <thead class="thead-strong">
@@ -32,17 +40,17 @@
                     <tbody id="tbody">
                     {{#hosted}}
                         <tr>
-                            <td><a href="/post/find/{{id}}">{{title}}</a></td>
+                            <td id="post-{{id}}"><a href="/post/find/{{id}}">{{title}}</a></td>
                             <td><span style="color: orangered;">{{personNow}}</span> / {{personLimit}}</td>
                             <td>{{endDate}}</td>
                             <td>
-                                <button>수정</button>
-                                <button>삭제</button>
+                                <button id="btn-update"><a href="/post/update/{{id}}">수정</a></button>
+                                <button id="btn-delete">삭제</button>
                             </td>
                         </tr>
                         <tr>
                             {{#participants}}
-                                (이름:{{name}}, 학번:{{studentId}}, 연락처:{{contact}})
+                                (이름:{{name}}, 학번:{{studentId}}, 이메일:{{email}})
                                 <br>
                             {{/participants}}
                         </tr>
@@ -53,27 +61,122 @@
 
 
                 <div class="form-group">
-                    <label for="my-guest">내가 participated 한 모임</label>
+                    <label for="my-guest"><h2>내가 participated 한 모임</h2></label>
                     <table class="table table-horizontal table-bordered">
                         <thead class="thead-strong">
                         <tr>
                             <th>제목</th>
                             <th>모집 종료일</th>
                             <th>작성자</th>
+                            <th>참여 취소</th>
                         </tr>
                         </thead>
                         <tbody id="tbody">
                         {{#registered}}
                             <tr>
-                                <td><a href="/post/find/{{id}}">{{title}}</a></td>
+                                <td id="post-{{id}}"><a href="/post/find/{{id}}">{{title}}</a></td>
                                 <td>{{endDate}}</td>
                                 <td>{{author}}</td>
+                                <td><button id="btn-cancel">참여 취소</button></td>
                             </tr>
                         {{/registered}}
                         </tbody>
                     </table>
                 </div>
             </div>
+
         {{/my}}
     </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        console.log("init한다.");
+
+        $('#btn-my-update').on('click', function () {
+            console.log("버튼 누름");
+            updateMy();
+        });
+        $('#btn-cancel').on('click', function () {
+            var checkbtn = $(this);
+            var tr = checkbtn.parent().parent();
+            var td = tr.children();
+            var ahref = td.eq(0).attr('id').split('-')[1];
+            console.log("ahref="+ahref);
+            cancel_participate(ahref);
+        });
+        $('#btn-update').on('click', function () {
+            console.log("update 누름");
+            var checkbtn = $(this);
+            var tr = checkbtn.parent().parent();
+            var td = tr.children();
+            var ahref = td.eq(0).attr('id').split('-')[1];
+            // update(ahref);
+        });
+        $('#btn-delete').on('click', function () {
+            console.log("삭제 누름");
+            var checkbtn = $(this);
+            var tr = checkbtn.parent().parent();
+            var td = tr.children();
+            var ahref = td.eq(0).attr('id').split('-')[1];
+            remove(ahref);
+        });
+        updateMy = function () {
+            var data = {
+                oauthId: $('.my-info[id=oauthId]').val(), //식별용
+                name: $('.my-info[id=name]').val(),
+                email: $('.my-info[id=email]').val(),
+                studentId: $('.my-info[id=studentId]').val()
+            };
+            console.log(data);
+            $.ajax({
+                type: 'PUT',
+                url: '/api/v1/user',
+                dataType: 'json', //서버측에서 전송받은 데이터 타입
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
+                success: function (response) {
+                    alert('정보가 수정되었습니다.');
+                }, error: function (error) {
+                    console.log(JSON.stringify(error));
+                }
+            })
+        };
+
+
+        cancel_participate= function (post_id){
+            $.ajax({
+                type: 'GET',
+                url: '/api/v1/user/cancel/'+post_id,
+                dataType: 'json', //서버측에서 전송받은 데이터 타입
+                contentType: 'application/json; charset=utf-8',
+                // data: JSON.stringify(data),
+                success: function (response) {
+                    alert('참여가 취소되었습니다.');
+                    window.location.href = '/my';
+                }, error: function (error) {
+                    console.log(JSON.stringify(error));
+                }
+            })
+        };
+
+        remove = function (ahref) {
+            $.ajax({
+                type: 'DELETE',
+                url: '/api/v1/post/'+ahref,
+                dataType: 'json', //서버측에서 전송받은 데이터 타입
+                contentType: 'application/json; charset=utf-8',
+                // data: JSON.stringify(data),
+                success: function (response) {
+                    alert('글이 삭제되었습니다.');
+                    window.location.href = '/';
+                }, error: function (error) {
+                    alert(JSON.stringify(error));
+                }
+            })
+        };
+    });
+</script>
 {{>layout/footer}}

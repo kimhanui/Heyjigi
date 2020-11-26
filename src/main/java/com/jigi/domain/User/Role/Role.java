@@ -1,24 +1,15 @@
 package com.jigi.domain.User.Role;
 
-import com.jigi.domain.User.User;
+
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
-import javax.persistence.*;
-
-@NoArgsConstructor
 @Getter
-@Entity
-public class Role {
+@RequiredArgsConstructor
+public enum Role {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Enumerated(EnumType.STRING)
-    private RoleEnum roleEnum;
-
-    @JoinColumn
-    @ManyToOne
-    private User user;
+    ADMIN("ROLE_ADMIN", "관리자"),
+    USER("ROLE_USER", "일반 사용자");
+    private final String key;
+    private final String title; //위 파라미터에 매핑된
 }

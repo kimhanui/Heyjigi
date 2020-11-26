@@ -2,6 +2,7 @@ package com.jigi.domain.Category;
 
 
 import com.jigi.domain.BaseEntity;
+import com.jigi.domain.Post.Post;
 import com.jigi.domain.User.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,8 +19,12 @@ public class Category extends BaseEntity {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    private CategoryEnum type;
+    private CategoryEnum categoryEnum;
 
-//    @OneToMany(mappedBy = "subscribes")
-//    private List<User> subscribers;
+    @OneToMany(mappedBy="category")
+    private List<Post> posts;
+
+
+    @ManyToMany(mappedBy="categories")
+    private List<User> users;
 }
