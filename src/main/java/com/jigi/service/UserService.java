@@ -74,11 +74,13 @@ public class UserService {
     }
 
     @Transactional
-    public void updateCategory(String oauthId, String rawCategory) throws IllegalArgumentException {
+    public void updateCategory(String oauthId, String rawCategory){
+        log.info("updateCategory진입");
         User user = userRepository.findByOauthId(oauthId).orElseThrow(() -> new IllegalArgumentException("찾는 회원이 없습니다."));
+        log.info("user찾음");
         Category category = categoryRepository.findByCategoryEnum(CategoryEnum.valueOf(rawCategory.toUpperCase()));
-
-        user.addCategory(category);
+        log.info("----updateCategory: user="+user.toString());
+        user.updateCategory(category);
     }
 
     @Transactional

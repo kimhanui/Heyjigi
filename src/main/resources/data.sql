@@ -18,10 +18,10 @@ insert into USER(created_date_time, modified_datetime, PROFILE_IMAGE,OAUTH_ID,EM
 insert into USER(created_date_time, modified_datetime, PROFILE_IMAGE,OAUTH_ID,EMAIL, name, student_id) values ('2020-11-18T18:00:00','2020-11-18T18:00:00','/images/hapshida.jpg','1500000004','kim@gmail.com','스터김','210210');
 
 -- user(guest)-post 다대다
-insert into user_post(user_id, post_id) values(1L, 1L);
 insert into user_post(user_id, post_id) values(1L, 2L);
-insert into user_post(user_id, post_id) values(2L, 3L);
+insert into user_post(user_id, post_id) values(1L, 3L);
 insert into user_post(user_id, post_id) values(2L, 4L);
+insert into user_post(user_id, post_id) values(2L, 3L);
 
 -- user-category 다대다
 insert into user_category(user_id,category_id) values(1L, 1L);

@@ -4,13 +4,14 @@ import com.jigi.domain.User.User;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 
 
 @ToString
 @Getter
-public class MyResponseDto {
+public class MyResponseDto  {
     private String oauthId;
     private Long studentId;
     private String name;

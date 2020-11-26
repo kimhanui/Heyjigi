@@ -4,6 +4,7 @@ import com.jigi.domain.User.User;
 import com.jigi.domain.User.UserRepository;
 import com.jigi.web.dto.OAuthAttributes;
 import com.jigi.web.dto.SessionUser;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.core.ParameterizedTypeReference;
@@ -41,7 +42,7 @@ import java.util.*;
  * 가입 및 정보수정, 세션 저장 등의 기능을 지원합니다.*/
 @Transactional
 @Log
-@RequiredArgsConstructor
+@AllArgsConstructor
 @Service
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
     private final UserRepository userRepository;

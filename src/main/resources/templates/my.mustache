@@ -6,28 +6,50 @@
 <div class="col-md-12">
     <div class="col-md-4">
         {{#my}}
-            <div class="form-group">
-                <label for="profile">내 정보</label>
-                <br>프로필 이미지
-                <img style="width:150px; length:150px;" src="{{profile_image}}"/>
-                <br>
-                <br>oauthId: <input class="my-info" id="oauthId" style="background-color: cadetblue;" type="text" class="form-control"
-                                    value="{{oauthId}}" readonly>
-                <br>이름:<input class="my-info" id="name" style="background-color: darkseagreen;" type="text"
-                              class="form-control"
-                              value="{{name}}" readonly>
-                <br>이메일:<input class="my-info" id="email" style="background-color: aquamarine;" type="text"
-                               class="form-control"
-                               value="{{email}}">
-                <br>학번:<input class="my-info" id="studentId" style="background-color: aquamarine;" type="text"
-                              class="form-control"
-                              value="{{studentId}}">
-
+            <div>
+                <div class="form-group">
+                    <label for="profile">내 정보</label>
+                    <br>프로필 이미지
+                    <img style="width:150px; length:150px;" src="{{profile_image}}"/>
+                </div>
+                <div class="form-group">
+                    <label for="oauthId">
+                        oauthId: <input class="my-info" id="oauthId" style="background-color: cadetblue;"
+                                        type="text" class="form-control"
+                                        value="{{oauthId}}" readonly>
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label for="name">
+                        <br>이름:<input class="my-info" id="name" style="background-color: darkseagreen;" type="text"
+                                      class="form-control"
+                                      value="{{name}}" readonly>
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label for="name">
+                        <br>이메일:<input class="my-info" id="email" style="background-color: aquamarine;" type="text"
+                                       class="form-control"
+                                       value="{{email}}">
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label for="studentId">
+                        <br>학번:<input class="my-info" id="studentId" style="background-color: aquamarine;" type="text"
+                                      class="form-control"
+                                      value="{{studentId}}">
+                    </label>
+                </div>
                 <button id="btn-my-update">학번 수정</button>
             </div>
+            <h2>소식 알림 설정</h2>
+            아두이노<input type="checkbox" name="arduino" value="아두이노" checked>
+            축구/족구<input type="checkbox" name="sports" value="축구/족구">
+            전시회<input type="checkbox" name="exhibition" value="전시회">
+            스터디<input type="checkbox" name="study" value="스터디">
+
             <div class="form-group">
                 <label for="my-host"><h2>내가 lead하는 모임</h2></label>
-
                 <table class="table table-horizontal table-bordered">
                     <thead class="thead-strong">
                     <tr>
@@ -48,12 +70,15 @@
                                 <button id="btn-delete">삭제</button>
                             </td>
                         </tr>
-                        <tr>
-                            {{#participants}}
-                                (이름:{{name}}, 학번:{{studentId}}, 이메일:{{email}})
+                        {{#participants}}
+                            <tr>
+                                <td>-</td>
+                                <td>이름:{{name}}</td>
+                                <td>학번:{{studentId}}</td>
+                                <td>이메일:{{email}})</td>
                                 <br>
-                            {{/participants}}
-                        </tr>
+                            </tr>
+                        {{/participants}}
 
                     {{/hosted}}
                     </tbody>
@@ -77,7 +102,9 @@
                                 <td id="post-{{id}}"><a href="/post/find/{{id}}">{{title}}</a></td>
                                 <td>{{endDate}}</td>
                                 <td>{{author}}</td>
-                                <td><button id="btn-cancel">참여 취소</button></td>
+                                <td>
+                                    <button id="btn-cancel">참여 취소</button>
+                                </td>
                             </tr>
                         {{/registered}}
                         </tbody>
@@ -94,6 +121,36 @@
     $(document).ready(function () {
 
         console.log("init한다.");
+        setCategory = function (val) {
+            $.ajax({
+                type: 'GET',
+                url: '/api/v1/user/category/' + val,
+                dataType: 'json', //서버측에서 전송받은 데이터 타입
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+
+                }, error: function (error) {
+                    console.log(JSON.stringify(error));
+                }
+            })
+        };
+
+
+        $('input:checkbox').on('change', function () {
+            console.log("checkbos changed" + $(this).attr('name'));
+            if ($(this).attr('name') == 'arduino') {
+                setCategory('arduino');
+            }
+            if ($(this).attr('name') == 'sports') {
+                setCategory('sports');
+            }
+            if ($(this).attr('name') == 'exhibition') {
+                setCategory('exhibition');
+            }
+            if ($(this).attr('name') == 'study') {
+                setCategory('study');
+            }
+        })
 
         $('#btn-my-update').on('click', function () {
             console.log("버튼 누름");
@@ -104,17 +161,10 @@
             var tr = checkbtn.parent().parent();
             var td = tr.children();
             var ahref = td.eq(0).attr('id').split('-')[1];
-            console.log("ahref="+ahref);
+            console.log("ahref=" + ahref);
             cancel_participate(ahref);
         });
-        $('#btn-update').on('click', function () {
-            console.log("update 누름");
-            var checkbtn = $(this);
-            var tr = checkbtn.parent().parent();
-            var td = tr.children();
-            var ahref = td.eq(0).attr('id').split('-')[1];
-            // update(ahref);
-        });
+
         $('#btn-delete').on('click', function () {
             console.log("삭제 누름");
             var checkbtn = $(this);
@@ -123,6 +173,7 @@
             var ahref = td.eq(0).attr('id').split('-')[1];
             remove(ahref);
         });
+
         updateMy = function () {
             var data = {
                 oauthId: $('.my-info[id=oauthId]').val(), //식별용
@@ -146,10 +197,10 @@
         };
 
 
-        cancel_participate= function (post_id){
+        cancel_participate = function (post_id) {
             $.ajax({
                 type: 'GET',
-                url: '/api/v1/user/cancel/'+post_id,
+                url: '/api/v1/user/cancel/' + post_id,
                 dataType: 'json', //서버측에서 전송받은 데이터 타입
                 contentType: 'application/json; charset=utf-8',
                 // data: JSON.stringify(data),
@@ -165,7 +216,7 @@
         remove = function (ahref) {
             $.ajax({
                 type: 'DELETE',
-                url: '/api/v1/post/'+ahref,
+                url: '/api/v1/post/' + ahref,
                 dataType: 'json', //서버측에서 전송받은 데이터 타입
                 contentType: 'application/json; charset=utf-8',
                 // data: JSON.stringify(data),

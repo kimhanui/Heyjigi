@@ -19,10 +19,13 @@ public class UserController {
     private final UserService userService;
     private final HttpSession httpSession;
 
-    @GetMapping("/api/v1/user/category")//@RequestParam은 ajax에서 data:{ rawCategory: "STUDY"}
-    public ResponseEntity<JSONObject> setCategory(@RequestParam String rawCategory, String oauthId) {
+    @GetMapping("/api/v1/user/category/{rawCategory}")//@RequestParam은 ajax에서 data:{ rawCategory: "STUDY"}
+    public ResponseEntity<JSONObject> setCategory(@PathVariable String rawCategory) {
+        SessionUser sessionUser = (SessionUser) httpSession.getAttribute("sessionUser");
+        String oauthId = sessionUser.getOauthId();
         ResponseEntity<JSONObject> responseEntity = null;
         JSONObject jsonObject = new JSONObject();
+        log.info("---setCategory:"+rawCategory);
         try {
             userService.updateCategory(oauthId, rawCategory);
             jsonObject.put("data", "ok");

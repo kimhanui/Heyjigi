@@ -1,9 +1,11 @@
 package com.jigi.config.oauth;
 
+import lombok.extern.java.Log;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 
+@Log
 public enum CustomOAuth2Provider {
 
     KAKAO {
@@ -11,6 +13,7 @@ public enum CustomOAuth2Provider {
         public ClientRegistration.Builder getBuilder(String registrationId) {
             ClientRegistration.Builder builder = getBuilder(registrationId,
                     ClientAuthenticationMethod.POST, DEFAULT_LOGIN_REDIRECT_URL);
+            log.info("---defaul url:"+DEFAULT_LOGIN_REDIRECT_URL);
             builder.scope("profile");
             builder.authorizationUri("https://kauth.kakao.com/oauth/authorize");
             builder.tokenUri("https://kauth.kakao.com/oauth/token");

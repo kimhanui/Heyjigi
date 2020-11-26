@@ -18,4 +18,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("select u from User u Join u.categories c where c.categoryEnum = :categoryEnum")
     List<User> findByCategoryEnum(@Param("categoryEnum")CategoryEnum categoryEnum);
+
 }

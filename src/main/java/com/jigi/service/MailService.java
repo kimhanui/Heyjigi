@@ -1,13 +1,13 @@
 package com.jigi.service;
 
 import com.jigi.web.dto.MailDto;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 @Service
 @Log
 public class MailService {

@@ -83,6 +83,20 @@ public class IndexController {
             //내 계정 정보필요
             MyResponseDto myResponseDto = userService.findMyInfoByOauthId(sessionUser.getOauthId());
             model.addAttribute("my", myResponseDto);
+
+        } catch(NullPointerException e){
+            model.addAttribute("errorMessage", e.getMessage());
+            return "errorPage";
+        }
+        return "my";
+    }
+
+    @GetMapping("/my/{oauthId}")
+    public String mypage(Model model, @PathVariable String oauthId){//},@AuthenticationPrincipal OAuth2User oAuth2User) {
+        try {
+            //내 계정 정보필요
+            MyResponseDto myResponseDto = userService.findMyInfoByOauthId(oauthId);
+            model.addAttribute("my", myResponseDto);
         } catch(NullPointerException e){
             model.addAttribute("errorMessage", e.getMessage());
             return "errorPage";

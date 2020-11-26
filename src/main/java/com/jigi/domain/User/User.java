@@ -72,6 +72,14 @@ public class User extends BaseEntity {
         this.role = role;
         this.profile_image = profile_image;
     }
+    public void updateCategory(Category category){
+        if(this.categories.contains(category)== true){
+            deleteCategory(category);
+        }
+        else{
+            addCategory(category);
+        }
+    }
     public void addCategory(Category category){
         if(this.categories.contains(category) == false)
             this.categories.add(category);
