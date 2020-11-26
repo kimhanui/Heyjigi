@@ -11,16 +11,16 @@ spring:
   datasource:
     platform: h2
     hikari:
-      url: jdbc:h2:mem:testdb;MVCC=TRUE
+      jdbc-url: jdbc:h2:mem:testdb;MVCC=TRUE
       username: g5momo
       password: zlzlemr66^^
       driver-class-name: org.h2.Driver
   h2:
     console:
       enabled: true
-    path: /h2-heyjigi
-    settings:
-      web-allow-others: true
+      path: /h2-heyjigi
+      settings:
+        web-allow-others: true
 
   # jpa
   jpa:
