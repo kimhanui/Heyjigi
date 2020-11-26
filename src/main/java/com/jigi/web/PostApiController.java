@@ -2,6 +2,7 @@ package com.jigi.web;
 
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.jigi.domain.User.User;
 import com.jigi.service.MailService;
 import com.jigi.service.PostService;
 import com.jigi.service.UserService;
@@ -59,16 +60,10 @@ public class PostApiController {
     @PutMapping("/api/v1/post/join/{id}")
     public Long join(@PathVariable Long id) {
         SessionUser sessionUser = (SessionUser) httpSession.getAttribute("sessionUser");
-//        /** 알림 보내기 **/
-//        List<UserResponseDto> userList = userService.findByCategoryEnum(dto.getRawCategoryEnum());
-//        for (UserResponseDto userResponseDto : userList) {
-//            log.info("보낼대상:" + userResponseDto.getName());
-//        }
-//        List<MailDto> mailDtos = userList.stream().map(MailDto::new).collect(Collectors.toList());//메일 보내기
-//        for (MailDto mailDto : mailDtos) {
-//            mailDto.setType(1);
-//            mailService.mailSend(mailDto);
-//        }
+        /** 알림 보내기 **/
+        User user  = postService.getHost(id);
+        MailDto mailDto = new MailDto(user.getEmail(), user.getName(), 2); //메일 보내기
+        mailService.mailSend(mailDto);
 
         return postService.getParticipant(id, sessionUser.getOauthId());
     }

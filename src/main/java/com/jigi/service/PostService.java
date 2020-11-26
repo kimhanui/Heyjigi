@@ -37,6 +37,11 @@ public class PostService {
         post.setHost(host);
         return postRepository.save(post).getId();
     }
+    @Transactional(readOnly = true)
+    public User getHost(Long id){
+        Post post = postRepository.findById(id).orElseThrow(()->new IllegalArgumentException("존재하지 않는 글입니다."));
+        return post.getHost();
+    }
     @Transactional
     public Long getParticipant(Long id, String oauthId)throws IllegalArgumentException{
         Post post = postRepository.findById(id).orElseThrow(()->new IllegalArgumentException("존재하지 않는 글입니다."));

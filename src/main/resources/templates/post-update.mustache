@@ -46,7 +46,7 @@
     $(document).ready(function () {
         console.log("init한다.");
 
-        var cat = {{post.rawCategoryEnum}}.toString();
+        var cat = String({{post.rawCategoryEnum}});
         console.log("post.category=" + cat);
         $('input[type="radio"]').each(function (index, item) {
             console.log("item:" + $(item).val());
