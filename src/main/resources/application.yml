@@ -12,8 +12,8 @@ spring:
     platform: h2
     hikari:
       jdbc-url: jdbc:h2:mem:testdb;MVCC=TRUE
-      username: g5momo
-      password: zlzlemr66^^
+      username: sa
+      password:
       driver-class-name: org.h2.Driver
   h2:
     console:
