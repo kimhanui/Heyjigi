@@ -46,9 +46,6 @@ public class PostApiController {
 
         /** 알림 보내기 **/
         List<UserResponseDto> userList = userService.findByCategoryEnum(dto.getRawCategoryEnum());
-        for (UserResponseDto userResponseDto : userList) {
-            log.info("보낼대상:" + userResponseDto.getName());
-        }
         List<MailDto> mailDtos = userList.stream().map(MailDto::new).collect(Collectors.toList());//메일 보내기
         for (MailDto mailDto : mailDtos) {
             mailDto.setType(1);
