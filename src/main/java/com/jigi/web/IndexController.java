@@ -77,14 +77,14 @@ public class IndexController {
         return "post-update";
     }
     @GetMapping("/my")
-    public String mypage(Model model){//},@AuthenticationPrincipal OAuth2User oAuth2User) {
+    public String mypage(Model model){
         SessionUser sessionUser = (SessionUser) httpSession.getAttribute("sessionUser");
         try {
             //내 계정 정보필요
             MyResponseDto myResponseDto = userService.findMyInfoByOauthId(sessionUser.getOauthId());
             model.addAttribute("my", myResponseDto);
 
-        } catch(NullPointerException e){
+        } catch(IllegalArgumentException e){
             model.addAttribute("errorMessage", e.getMessage());
             return "errorPage";
         }
@@ -92,12 +92,12 @@ public class IndexController {
     }
 
     @GetMapping("/my/{oauthId}")
-    public String mypage(Model model, @PathVariable String oauthId){//},@AuthenticationPrincipal OAuth2User oAuth2User) {
+    public String mypage(Model model, @PathVariable String oauthId){
         try {
             //내 계정 정보필요
             MyResponseDto myResponseDto = userService.findMyInfoByOauthId(oauthId);
             model.addAttribute("my", myResponseDto);
-        } catch(NullPointerException e){
+        } catch(IllegalArgumentException e){
             model.addAttribute("errorMessage", e.getMessage());
             return "errorPage";
         }
