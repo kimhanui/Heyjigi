@@ -1,137 +1,119 @@
+<link href="./css/home.css" rel="stylesheet"/>
+
 {{>layout/header}} {{! 현재 머스테치 파일을 기준으로 다른 파일을 가져옴}}
-<div style="text-align: center">
-    <h1>Hey Jigi</h1>
-    <h3>지능기전학부생들을 위한 번개식 모임 웹앱 ver1</h3>
-    {{#sessionUser}}
-        <span>사용자:{{name}} oauthId: {{oauthId}}</span>
-    {{/sessionUser}}
-</div>
-<div class="col-md-12">
-    <div class="row">
-        <div class="col-md-7">
-            <br>
-            <span class="col-md-6">
-                {{#sessionUser}}
-                    <a href="/my" role="button" class="btn btn-primary">내 정보/활동</a>
-                {{/sessionUser}}
-            </span>
-
-            <!--동의 화면 후 "/oauth2/authorization/kakao"호출하여 로그인-->
-            <!--https://momentjin.tistory.com/144#comment20065801-->
-            <!-- oauth 세션이 없을 때-->
-            <span class="col-md-6">
-                {{^sessionUser}}
-                    <a href="/oauth2/authorization/kakao" role="button" class="btn btn-primary">카카오 계정 로그인</a>
-                {{/sessionUser}}
-            </span>
-
-            <span class="col-md-6">
-                {{#sessionUser}}<!-- oauth 세션이 있을 때-->
-                    <a href="/logout" role="button" class="btn btn-primary">로그아웃</a>
-                {{/sessionUser}}
-            </span>
-            <br>
-            <div>
-                <button class="btn-list" name="cat-arduino">아두이노 부품 공구</button>
-                <button class="btn-list" name="cat-sports">축구/족구</button>
-                <button class="btn-list" name="cat-exhibition">코엑스 전시회(몰라도 같이 모르고 공유)</button>
-                <button class="btn-list" name="cat-study">공모전 참여(팀원 모집)</button>
-
-            </div>
-        </div>
-        <br>
-        <div class="row">
-            <div class="col-md-6">
-                {{#sessionUser}}
-                    <a href="/post/save" role="button" class="btn btn-primary">글 등록</a>
-                {{/sessionUser}}
-            </div>
-        </div>
-        <br>
-        <!--목록 출력 영역-->
-        <table class="table table-horizontal table-bordered">
-            <thead class="thead-strong">
-            <tr>
-                <th>글번호</th>
-                <th>제목</th>
-                <th>필요 인원</th>
-                <th>작성자</th>
-                <th>모집 종료일</th>
-            </tr>
-            </thead>
-            <tbody id="tbody">
-            {{#posts}}
-                <tr>
-                    <td>{{id}}</td>
-                    <td><a href="/post/find/{{id}}">{{title}}</a></td>
-                    <td><span style="color: orangered;">{{personNow}}</span> / {{personLimit}}</td>
-                    <td>{{author}}</td>
-                    <td>{{endDate}}</td>
-                </tr>
-            {{/posts}}
-            </tbody>
-        </table>
+<!--<div style="text-align: center">-->
+<!--    <h5>Hey Jigi</h5>-->
+<!--    <h3>지능기전학부생들을 위한 번개식 모임 웹앱 ver1</h3>-->
+<!--    {{#sessionUser}}-->
+<!--        <span>사용자:{{name}} oauthId: {{oauthId}}</span>-->
+<!--    {{/sessionUser}}-->
+<!--</div>-->
+<header>
+    <div class="logo">
+        Hey Jigi
     </div>
+    <div>
+    {{#sessionUser}}
+        <a href="/my" role="button" class="btn btn-primary">내 정보/활동</a>
+    {{/sessionUser}}
+    {{#sessionUser}}
+        <button>글쓰기</button>
+    {{/sessionUser}}
+    {{^sessionUser}}
+        <a href="/oauth2/authorization/kakao" role="button" class="kakao-login">카카오 계정 로그인</a>
+    {{/sessionUser}}
+    {{#sessionUser}}<!-- oauth 세션이 있을 때-->
+        <a href="/logout" role="button" class="btn btn-primary">로그아웃</a>
+    {{/sessionUser}}
+    </div>
+</header>
+<main>
+    <h3>
+        모임 목록
+    </h3>
+    <div class="tab-list">
+        <div class="tab active" name="arduino">
+            부품 공구
+        </div>
+        <div class="tab" name="sports">
+            축구/족구
+        </div>
+        <div class="tab" name="exhibition">
+            코엑스 전시회
+        </div>
+        <div class="tab" name="study">
+            공모전 참여
+        </div>
+    </div>
+    <div class="card-list" id="card-list">
+        {{#posts}}
+            <a class="card" href="/post/find/{{id}}">
+                <div class="title">
+                    {{title}}
+                </div>
+                <div class="author">
+                    {{author}}
+                </div>
+                <div class="bottom">
+                    <span class="date">
+                        {{endDate}}
+                    </span>
+                    <span class="member">
+                        <b>{{personNow}}</b> / {{personLimit}}
+                    </span>
+                </div>
+            </a>
+        {{/posts}}
+    </div>
+</main>
 
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function () {
+<script type="text/javascript">
+    const getPostList = async (categoryName) => {
+        try{
+            const resp = await fetch(`/api/v1/post/list/${categoryName}`);
+            const posts = await resp.json();
 
-            console.log("init한다.");
+            const postList = posts.map((json) => {
+                const {id, title, author, endDate, personLimit, personNow} = json;
+                return `
+                        <a class="card" href="/post/find/${id}">
+                            <div class="title">
+                                ${title}
+                            </div>
+                            <div class="author">
+                                ${author}
+                            </div>
+                            <div class="bottom">
+                                <span class="date">
+                                    ${endDate}
+                                </span>
+                                <span class="member">
+                                    <b>${personNow}</b> / ${personLimit}
+                                </span>
+                            </div>
+                        </a>
+                    `
+            });
+            document.getElementById('card-list').innerHTML = postList;
+        }catch(e){
+            console.log(e);
+        }
+    }
+    const onClickTabButton = (e) => {
+        const name = e.target.getAttribute('name')
 
-            $('.btn-list').on('click', function () {
-                console.log("버튼 누름");
-                list($(this).attr("name"));
-            })
-            list = function (_this) {
-                cat_name = _this.split('-')[1]; //카테고리 이름 가져오기
-                console.log("cat_id=" + cat_name);
+        getPostList(name);
+    }
 
-                $.ajax({
-                    type: 'GET',
-                    url: '/api/v1/post/list/' + cat_name,
-                    dataType: 'json',
-                    contentType: 'application/json; charset=utf-8',
-                    success: function (response) {
-                        console.log("response" + JSON.stringify(response));
-                        printList(response);
+    window.onload = () => {
+        const tab = document.getElementsByClassName('tab');
+
+        for(let i=0; i<tab.length; i++){
+            tab[i].addEventListener('click', onClickTabButton);
+        }
+    }
+</script>
 
 
-                    }, error: function (error) {
-                        console.log("실패!\n" + JSON.stringify(error));
-                    }
-                })
-            };
 
-            printList = function (jsonArray) {
-                console.log('jsonArray:' + jsonArray);
-                var str = '';
-                for (var jsonObject in jsonArray) {
-                    console.log('jsonObject:' + jsonArray[jsonObject]);
-                    var id = jsonArray[jsonObject].id;
-                    var title = jsonArray[jsonObject].title;
-                    var author = jsonArray[jsonObject].author;
-                    var endDate = jsonArray[jsonObject].endDate;
-                    var personLimit = jsonArray[jsonObject].personLimit;
-                    var personNow = jsonArray[jsonObject].personNow;
-
-                    str += '<tr>\n' +
-                            '                <td>' + id + '</td>\n' +
-                            '                <td><a href="/post/find/' + id + '">' + title + '</a></td>\n' +
-                            '                <td><span style="color: orangered;">' + personNow + '</span> / ' + personLimit + '</td>\n' +
-                            '                <td>' + author + '</td>\n' +
-                            '                <td>' + endDate + '</td>\n' +
-                            '            </tr>';
-                }
-                //#tbody에 출력
-                console.log(str);
-                $('#tbody').html(str);
-            };
-
-            alarm = function (c) {
-
-            };
-        });
-    </script>
 {{>layout/footer}}
