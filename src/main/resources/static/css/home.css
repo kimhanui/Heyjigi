@@ -1,0 +1,105 @@
+html, body{
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+a{
+    color: black;
+    text-decoration: none;
+}
+
+header{
+    height: 5rem;
+    background: rgb(53, 54, 58);
+    width: 100vw;
+    /*position: fixed;*/
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+header .logo{
+    font-size: 1.5rem;
+    color: white;
+    margin-left: 2rem;
+}
+
+header .kakao-login{
+    color: white;
+    margin-right: 2rem;
+}
+header button{
+    margin-right: 2rem;
+    border : none;
+    border-radius : 4px;
+    font-size : 1rem;
+    font-weight : bold;
+    padding : 11px 21px;
+    background: rgb(163, 89, 185);
+    color : white;
+    outline : none;
+    cursor: pointer;
+}
+
+main{
+    height: calc(100vh - 4rem);
+    padding: 2rem;
+}
+
+main h3{
+    font-size: 20px;
+}
+
+main .tab-list{
+    display: flex;
+    flex-direction: row;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+main .tab-list .tab{
+    cursor: pointer;
+}
+
+main .tab-list .tab + .tab{
+    margin-left: 1rem;
+}
+main .tab-list .active{
+    font-weight: bold;
+}
+.card-list{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.card-list .card{
+    cursor: pointer;
+    padding: 2rem;
+    min-width: 320px;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 16px 0px;
+}
+
+.card-list .card .bottom{
+    margin-top: 2rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.card-list .card .bottom .date{
+    color: rgb(134, 142, 150);
+}
+
+.card-list .card + .card{
+    margin-left: 1rem;
+}
+
+
+.card-list .card .title{
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: .5rem;
+}
