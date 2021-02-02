@@ -1,30 +1,25 @@
 <link href="./css/home.css" rel="stylesheet"/>
+<link href="./css/master.css" rel="stylesheet"/>
+<link href="./css/header.css" rel="stylesheet"/>
 
 {{>layout/header}} {{! 현재 머스테치 파일을 기준으로 다른 파일을 가져옴}}
-<!--<div style="text-align: center">-->
-<!--    <h5>Hey Jigi</h5>-->
-<!--    <h3>지능기전학부생들을 위한 번개식 모임 웹앱 ver1</h3>-->
-<!--    {{#sessionUser}}-->
-<!--        <span>사용자:{{name}} oauthId: {{oauthId}}</span>-->
-<!--    {{/sessionUser}}-->
-<!--</div>-->
 <header>
     <div class="logo">
         Hey Jigi
     </div>
-    <div>
-    {{#sessionUser}}
-        <a href="/my" role="button" class="btn btn-primary">내 정보/활동</a>
-    {{/sessionUser}}
-    {{#sessionUser}}
-        <button>글쓰기</button>
-    {{/sessionUser}}
-    {{^sessionUser}}
-        <a href="/oauth2/authorization/kakao" role="button" class="kakao-login">카카오 계정 로그인</a>
-    {{/sessionUser}}
-    {{#sessionUser}}<!-- oauth 세션이 있을 때-->
-        <a href="/logout" role="button" class="btn btn-primary">로그아웃</a>
-    {{/sessionUser}}
+    <div class="profile-list">
+        {{#sessionUser}}
+            <a href="/my" role="button" class="btn btn-primary">내 정보/활동</a>
+        {{/sessionUser}}
+        {{^sessionUser}}
+            <a href="/oauth2/authorization/kakao" role="button" class="kakao-login">카카오 계정 로그인</a>
+        {{/sessionUser}}
+        {{#sessionUser}}<!-- oauth 세션이 있을 때-->
+            <a href="/logout" role="button" class="btn btn-primary">로그아웃</a>
+        {{/sessionUser}}
+        {{#sessionUser}}
+            <a href="/post/save"><button>글쓰기</button></a>
+        {{/sessionUser}}
     </div>
 </header>
 <main>
@@ -101,10 +96,8 @@
     }
     const onClickTabButton = (e) => {
         const name = e.target.getAttribute('name')
-
         getPostList(name);
     }
-
     window.onload = () => {
         const tab = document.getElementsByClassName('tab');
 
