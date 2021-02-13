@@ -1,5 +1,6 @@
 # Heyjigi
 > 🌏 Released: http://hey-jigi.herokuapp.com/  
+> 테스트데이터의 '내 정보/활동' 링크: http://hey-jigi.herokuapp.com/my/1500000000  
 > 🚩 [Youtube 설명](https://www.youtube.com/watch?v=LpwhB6LORa8&t=263s)  
 > ☁ [Google Presentation 자료](https://docs.google.com/presentation/d/e/2PACX-1vTzu13ejPVLyEJ6x8N2DAr55OycqfXvgHF7ndgVnKh45Y8oSiYF0n1DFkGYUjsk4v7qdIv5bzwDUk6e/pub?start=true&loop=false&delayms=3000)
 
