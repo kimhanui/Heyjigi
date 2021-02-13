@@ -1,8 +1,7 @@
 # Heyjigi
-> 🌏 Released: http://hey-jigi.herokuapp.com/  
+> 🌏 Released: http://hey-jigi.herokuapp.com/   
 > 🎮 테스트데이터의 '내 정보/활동'보기: http://hey-jigi.herokuapp.com/my/1500000000  
-
-> 🚩 [Youtube 설명](https://www.youtube.com/watch?v=LpwhB6LORa8&t=263s)  
+> 🚩 [Youtube 설명](https://www.youtube.com/watch?v=LpwhB6LORa8&t=263s)   
 > ☁ [Google Presentation 자료](https://docs.google.com/presentation/d/e/2PACX-1vTzu13ejPVLyEJ6x8N2DAr55OycqfXvgHF7ndgVnKh45Y8oSiYF0n1DFkGYUjsk4v7qdIv5bzwDUk6e/pub?start=true&loop=false&delayms=3000)  
 > 📜 How To Guide [Hey-Jigi Notion](https://www.notion.so/Hey-Jigi-d8261a9123ad434c9c348ac750073abd)
 
