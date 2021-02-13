@@ -8,10 +8,11 @@ spring:
     client-id: c3fd7ee121c229e092ecaf7a67960298
     client-secret: 95i43gMteAlEXkkZvjKKyADCvsNvwkd7
   mail:
-    host: smtp.gmail.com
+    host: smtp.cloudmta.net
     port: 587
-    username: heyjigi@gmail.com
-    password: zlzlemr66^^
+    protocol: smtp
+    username: e42f948c506dea73
+    password: L5EgHTwDFfaxB4FcRpH4D1s9
     properties:
       mail:
         smtp:
