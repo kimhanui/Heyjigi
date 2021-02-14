@@ -46,14 +46,12 @@ public class PostApiController {
 
         /** 알림 보내기 **/
         List<UserResponseDto> userList = userService.findByCategoryEnum(dto.getRawCategoryEnum());
-        for (UserResponseDto userResponseDto : userList) {
-            log.info("보낼대상:" + userResponseDto.getName());
-        }
-        List<MailDto> mailDtos = userList.stream().map(MailDto::new).collect(Collectors.toList());//메일 보내기
-        for (MailDto mailDto : mailDtos) {
-            mailDto.setType(1);
-            mailService.mailSend(mailDto);
-        }
+        userList.stream().map(MailDto::new)
+                .forEach(mailDto -> {
+                    mailDto.setType(1);
+                    mailService.mailSend(mailDto);
+                });//메일 보내기
+
         return responseEntity;
     }
 
@@ -61,7 +59,7 @@ public class PostApiController {
     public Long join(@PathVariable Long id) {
         SessionUser sessionUser = (SessionUser) httpSession.getAttribute("sessionUser");
         /** 알림 보내기 **/
-        User user  = postService.getHost(id);
+        User user = postService.getHost(id);
         MailDto mailDto = new MailDto(user.getEmail(), user.getName(), 2); //메일 보내기
         mailService.mailSend(mailDto);
 

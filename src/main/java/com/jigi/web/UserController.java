@@ -9,8 +9,12 @@ import net.minidev.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import sun.net.www.protocol.http.HttpURLConnection;
 
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @Log
 @RequiredArgsConstructor
@@ -58,5 +62,10 @@ public class UserController {
         return id;
     }
 
+    @RequestMapping("/logout")
+    public String logout(HttpSession session) throws IOException {
+        session.removeAttribute("sessionUser");
+        return "redirect:/";
+    }
 
 }

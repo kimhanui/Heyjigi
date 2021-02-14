@@ -1,32 +1,30 @@
 package com.jigi.config.oauth;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
-import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
-import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
-@Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final CustomOAuth2UserService customOAuth2UserService;
+//    private final CustomOauth2UserService customOauth2UserService;
+
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/templates/**");
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -35,33 +33,32 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors().disable()
                 .csrf().disable()
                 .headers().frameOptions().disable();
-
         http.authorizeRequests()
                 .antMatchers("/**")
-//                "/my/**"
-//                        ,"/api/v1/user/**","/api/v1/post"
-//                        ,"/logout").hasAnyRole()
-//                .antMatchers("/**","/post/find/**","/api/v1/post/**")
-                .permitAll()//, "/oauth2/**", "/login/**","/css/**", "/images/**", "/js/**", "/h2-console/**", "/favicon.ico").permitAll()//url관리
+                .permitAll()
                 .anyRequest().authenticated()
             .and()
-                .oauth2Login()
-                .userInfoEndpoint().userService(customOAuth2UserService)
-            .and()
-                .failureUrl("/oauth2/authorization/kakao") //로그인 실패시 -> 다시 로그인 창
-                .defaultSuccessUrl("/")
-            .and()
                 .exceptionHandling()
-//                .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/userdenied"));
-                .accessDeniedPage("/userdenied"); //접근 권한 예외 페이지로 이동
+                .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"))
+            .and()
+                .logout()
+                .logoutUrl("/logout")
+                .clearAuthentication(true)
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
+                .logoutSuccessUrl("/")
+            .and()
+                .oauth2Login()
+                .failureUrl("/")
+                .defaultSuccessUrl("/")
+                .userInfoEndpoint()  /**OAuth2 로그인 성공 후 "사용자 정보를 가져올 때의 설정"들을 담당**/
+//                .userService(customOauth2UserService);
+;
+    }
 
-        http.logout()
-//                .logoutUrl("/api/v1/logout")
-//                .clearAuthentication(true)
-//                .invalidateHttpSession(true)
-//                .deleteCookies("JSESSIONID")
-                .logoutSuccessUrl("/");
-
+    @Bean
+    public OAuth2AuthorizedClientService authorizedClientService() {
+        return new MyOAuth2AuthorizedClientService();
     }
 
     @Bean
@@ -69,7 +66,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             @Value("${spring.security.oauth2.client.registration.kakao.client-id}") String kakaoClientId,
             @Value("${spring.security.oauth2.client.registration.kakao.client-secret}") String kakaoClientSecret) {
         List<ClientRegistration> registrations = new ArrayList<>();
-        registrations.add(CustomOAuth2Provider.KAKAO.getBuilder("kakao")
+        registrations.add(CustomOAuth2Provider.KAKAO.getBuilder()
                 .clientId(kakaoClientId)
                 .clientSecret(kakaoClientSecret)
                 .jwkSetUri("temp")

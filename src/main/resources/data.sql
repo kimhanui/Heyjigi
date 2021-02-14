@@ -23,10 +23,5 @@ insert into user_post(user_id, post_id) values(1L, 3L);
 insert into user_post(user_id, post_id) values(2L, 4L);
 insert into user_post(user_id, post_id) values(2L, 3L);
 
--- user-category 다대다
-insert into user_category(user_id,category_id) values(1L, 1L);
-insert into user_category(user_id,category_id) values(1L, 2L);
-insert into user_category(user_id,category_id) values(2L, 2L);
-insert into user_category(user_id,category_id) values(3L, 3L);
-insert into user_category(user_id,category_id) values(4L, 4L);
+
 set foreign_key_checks =1;
