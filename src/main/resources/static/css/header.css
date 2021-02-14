@@ -13,7 +13,10 @@ header .logo{
     color: white;
     margin-left: 2rem;
 }
-
+header .logo a{
+    color: white;
+    font-weight: bold;
+}
 header .kakao-login{
     color: white;
     margin-right: 2rem;

@@ -1,0 +1,77 @@
+main{
+    padding-left: 2rem;
+}
+
+main .profile-img{
+    padding: 2rem ;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+main .profile-img .name{
+    margin-top: .5rem;
+    font-size: 1.75rem;
+    font-weight: bold;
+    color: #222;
+}
+
+main .profile-img .email{
+    font-size: 1.125rem;
+    color: #dedede;
+}
+
+main .profile-img img{
+    border-radius: 50%;
+}
+
+
+.card-list{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.card-list .card{
+    cursor: pointer;
+    padding: 2rem;
+    min-width: 320px;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 16px 0px;
+}
+
+.card-list .card .bottom{
+    margin-top: 2rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.card-list .card .bottom .date{
+    color: rgb(134, 142, 150);
+}
+
+.card-list .card + .card{
+    margin-left: 1rem;
+}
+
+
+.card-list .card .title{
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: .5rem;
+}
+
+button{
+    margin-right: 2rem;
+    border : none;
+    border-radius : 4px;
+    font-size : 1rem;
+    font-weight : bold;
+    padding : 11px 21px;
+    background: rgb(163, 89, 185);
+    color : white;
+    outline : none;
+    cursor: pointer;
+}

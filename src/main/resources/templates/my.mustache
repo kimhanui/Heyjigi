@@ -1,123 +1,138 @@
+<link href="/css/master.css" rel="stylesheet"/>
+<link href="/css/header.css" rel="stylesheet"/>
+<link href="/css/profile.css" rel="stylesheet"/>
 {{>layout/header}}
-<h1>내 정보/활동</h1>
-<span class="col-md-2">
-    <a href="/" role="button" class="btn btn-primary">홈</a>
-</span>
-<div class="col-md-12">
-    <div class="col-md-4">
-        {{#my}}
-            <div>
-                <div class="form-group">
-                    <label for="profile">내 정보</label>
-                    <br>프로필 이미지
-                    <img style="width:150px; length:150px;" src="{{profile_image}}"/>
-                </div>
-                <div class="form-group">
-                    <label for="oauthId">
-                        oauthId: <input class="my-info" id="oauthId" style="background-color: cadetblue;"
-                                        type="text" class="form-control"
-                                        value="{{oauthId}}" readonly>
-                    </label>
-                </div>
-                <div class="form-group">
-                    <label for="name">
-                        <br>이름:<input class="my-info" id="name" style="background-color: darkseagreen;" type="text"
-                                      class="form-control"
-                                      value="{{name}}" readonly>
-                    </label>
-                </div>
-                <div class="form-group">
-                    <label for="name">
-                        <br>이메일:<input class="my-info" id="email" style="background-color: aquamarine;" type="text"
-                                       class="form-control"
-                                       value="{{email}}">
-                    </label>
-                </div>
-                <div class="form-group">
-                    <label for="studentId">
-                        <br>학번:<input class="my-info" id="studentId" style="background-color: aquamarine;" type="text"
-                                      class="form-control"
-                                      value="{{studentId}}">
-                    </label>
-                </div>
-                <button id="btn-my-update">학번 수정</button>
-            </div>
-            <h2>소식 알림 설정</h2>
-            아두이노<input type="checkbox" name="arduino" value="아두이노" checked>
-            축구/족구<input type="checkbox" name="sports" value="축구/족구">
-            전시회<input type="checkbox" name="exhibition" value="전시회">
-            스터디<input type="checkbox" name="study" value="스터디">
-
-            <div class="form-group">
-                <label for="my-host"><h2>내가 lead하는 모임</h2></label>
-                <table class="table table-horizontal table-bordered">
-                    <thead class="thead-strong">
-                    <tr>
-                        <th>제목</th>
-                        <th>필요 인원</th>
-                        <th>모집 종료일</th>
-                        <th>수정/삭제</th>
-                    </tr>
-                    </thead>
-                    <tbody id="tbody">
-                    {{#hosted}}
-                        <tr>
-                            <td id="post-{{id}}"><a href="/post/find/{{id}}">{{title}}</a></td>
-                            <td><span style="color: orangered;">{{personNow}}</span> / {{personLimit}}</td>
-                            <td>{{endDate}}</td>
-                            <td>
-                                <button id="btn-update"><a href="/post/update/{{id}}">수정</a></button>
-                                <button id="btn-delete">삭제</button>
-                            </td>
-                        </tr>
-                        {{#participants}}
-                            <tr>
-                                <td>-</td>
-                                <td>이름:{{name}}</td>
-                                <td>학번:{{studentId}}</td>
-                                <td>이메일:{{email}})</td>
-                                <br>
-                            </tr>
-                        {{/participants}}
-
-                    {{/hosted}}
-                    </tbody>
-                </table>
-
-
-                <div class="form-group">
-                    <label for="my-guest"><h2>내가 participated 한 모임</h2></label>
-                    <table class="table table-horizontal table-bordered">
-                        <thead class="thead-strong">
-                        <tr>
-                            <th>제목</th>
-                            <th>모집 종료일</th>
-                            <th>작성자</th>
-                            <th>참여 취소</th>
-                        </tr>
-                        </thead>
-                        <tbody id="tbody">
-                        {{#registered}}
-                            <tr>
-                                <td id="post-{{id}}"><a href="/post/find/{{id}}">{{title}}</a></td>
-                                <td>{{endDate}}</td>
-                                <td>{{author}}</td>
-                                <td>
-                                    <button id="btn-cancel">참여 취소</button>
-                                </td>
-                            </tr>
-                        {{/registered}}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-        {{/my}}
+<header>
+    <div class="logo">
+        Hey Jigi
     </div>
-</div>
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <div class="profile-list">
+        {{#sessionUser}}
+            <a href="/my" role="button" class="btn btn-primary">내 정보/활동</a>
+        {{/sessionUser}}
+        {{^sessionUser}}
+            <a href="/oauth2/authorization/kakao" role="button" class="kakao-login">카카오 계정 로그인</a>
+        {{/sessionUser}}
+        {{#sessionUser}}<!-- oauth 세션이 있을 때-->
+            <a href="/logout" role="button" class="btn btn-primary">로그아웃</a>
+        {{/sessionUser}}
+        {{#sessionUser}}
+            <a href="/post/save"><button>글쓰기</button></a>
+        {{/sessionUser}}
+    </div>
+</header>
+<main>
+    {{#my}}
+        <div class="profile-img">
+            <img style="width:150px; length:150px;" src="{{profile_image}}"/>
+            <span class="name">{{name}}</span>
+            <span class="email">{{email}}</span>
+        </div>
+    {{/my}}
+    {{#my}}
+        <h2>소식 알림 설정</h2>
+        아두이노<input type="checkbox" name="arduino" value="아두이노" checked>
+        축구/족구<input type="checkbox" name="sports" value="축구/족구">
+        전시회<input type="checkbox" name="exhibition" value="전시회">
+        스터디<input type="checkbox" name="study" value="스터디">
+
+        <h3>
+            개설한 모임
+        </h3>
+        <div class="card-group">
+            <div class="card-list">
+                {{#hosted}}
+                    <a class="card" href="/post/find/{{id}}">
+                        <div class="title">
+                            {{title}}
+                        </div>
+                        <div class="author">
+                            {{author}}
+                        </div>
+                        <div class="bottom">
+                                <span class="date">
+                                    {{endDate}}
+                                </span>
+                            <span class="member">
+                                    <button id="btn-delete">삭제</button>
+                                </span>
+                        </div>
+                    </a>
+                {{/hosted}}
+            </div>
+        </div>
+
+        <h3>
+            참여한 모임
+        </h3>
+        <div class="card-list">
+            {{#registered}}
+                <a class="card" href="/post/find/{{id}}">
+                    <div class="title">
+                        {{title}}
+                    </div>
+                    <div class="author">
+                        {{author}}
+                    </div>
+                    <div class="bottom">
+                            <span class="date">
+                                {{endDate}}
+                            </span>
+                        <span>
+                                <button id="btn-update"><a href="/post/update/{{id}}">수정</a></button>
+                            </span>
+                        <span class="member">
+                                <button id="btn-cancel">참여취소</button>
+                            </span>
+                    </div>
+                </a>
+            {{/registered}}
+        </div>
+    {{/my}}
+</main>
+
 <script type="text/javascript">
+
+    const onClickUpdateProfile = async (e) => {
+        const data = {
+
+        }
+        try{
+            await fetch(`/api/v1/user`, {
+                method: 'PUT',
+                body: JSON.stringify(data),
+            });
+        }catch (e){
+            console.log(e);
+        }
+    }
+
+    const onClickRemovePost = async (e) => {
+        const {name} = e.target;
+
+        try{
+            await fetch(`/api/v1/post/${name}`,{
+                method: 'DELETE'
+            });
+        } catch(e){
+            console.log(e);
+        }
+    }
+
+    const onClickCancelParticipate = async (e) => {
+        const {name} = e.target;
+
+        try{
+            await fetch(`/api/v1/post/${name}`,{
+                method: 'PUT'
+            });
+        } catch(e){
+            console.log(e);
+        }
+    }
+    window.onload = () => {
+
+    }
     $(document).ready(function () {
 
         console.log("init한다.");
@@ -134,7 +149,6 @@
                 }
             })
         };
-
 
         $('input:checkbox').on('change', function () {
             console.log("checkbos changed" + $(this).attr('name'));
