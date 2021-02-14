@@ -5,6 +5,8 @@
 > ☁ [Google Presentation 자료](https://docs.google.com/presentation/d/e/2PACX-1vTzu13ejPVLyEJ6x8N2DAr55OycqfXvgHF7ndgVnKh45Y8oSiYF0n1DFkGYUjsk4v7qdIv5bzwDUk6e/pub?start=true&loop=false&delayms=3000)  
 > 📜 How To Guide [Hey-Jigi Notion](https://www.notion.so/cc71d61c48a04cf0a63f34f6e0b6c30b)
 
+![image](https://user-images.githubusercontent.com/30483337/107876461-75ff8180-6f09-11eb-8da6-dbe50a9bb117.png)
+
 지능기전공학부 학생들을 위한 번개식 모임웹앱입니다.   
 - 2020 학과 sw경진대회에 참여해 개발한 서비스입니다.
 - 학과에 아는 사람이 없는 학생이 정말 필요한 경우 일면식 없이도 번개식 만남을 구할 수 있게 합니다.  
