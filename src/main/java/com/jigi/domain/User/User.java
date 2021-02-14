@@ -62,7 +62,7 @@ public class User extends BaseEntity {
 
     @Builder
     public User(String name, String email, Long studentId,String oauthId,// String providerName, String accessToken
-                Role role, String profile_image) {
+                Role role, String accessToken, String profile_image) {
 //        this.accessToken = accessToken;
 //        this.providerName = providerName;
         this.oauthId = oauthId;
@@ -70,10 +70,11 @@ public class User extends BaseEntity {
         this.email = email;
         this.studentId = studentId;
         this.role = role;
+        this.accessToken = accessToken;
         this.profile_image = profile_image;
     }
     public void updateCategory(Category category){
-        if(this.categories.contains(category)== true){
+        if(this.categories.contains(category)){
             deleteCategory(category);
         }
         else{
@@ -81,15 +82,15 @@ public class User extends BaseEntity {
         }
     }
     public void addCategory(Category category){
-        if(this.categories.contains(category) == false)
+        if(!this.categories.contains(category))
             this.categories.add(category);
-        if(category.getUsers().contains(this) == false)
+        if(!category.getUsers().contains(this))
             category.getUsers().add(this);
     }
     public void deleteCategory(Category category){
-        if(this.categories.contains(category) == true)
+        if(this.categories.contains(category))
             this.categories.remove(category);
-        if(category.getUsers().contains(this) == true)
+        if(category.getUsers().contains(this))
             category.getUsers().remove(this);
     }
     public User  update(OAuthAttributes oAuthAttributes){
@@ -99,15 +100,19 @@ public class User extends BaseEntity {
         this.profile_image = oAuthAttributes.getProfile_image();
         return this;
     }
+    public User update(User user){
+        this.oauthId = user.getOauthId();
+        this.name = user.getName();
+        this.email = user.getEmail();
+        this.studentId = user.getStudentId();
+        this.profile_image = user.getProfile_image();
+        return this;
+    }
     public void updateBasic(UserRequestDto userRequestDto){
           this.name =userRequestDto.getName();
           this.studentId = userRequestDto.getStudentId();
           this.email =userRequestDto.getEmail();
     }
-//    public void updateToken(String accessToken){
-//        this.accessToken = accessToken;
-//    }
-
     public String getRoleKey(){
         return this.role.getKey();
     }

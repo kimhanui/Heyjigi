@@ -21,7 +21,7 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
     private final HttpSession httpSession;
 
     @Override
-    public boolean supportsParameter(MethodParameter parameter) { // (1)
+    public boolean supportsParameter(MethodParameter parameter) { // Resolver를 적용가능한지 체크
         boolean isLoginUserAnnotation = parameter.getParameterAnnotation(LoginUser.class) != null;
         boolean isUserClass = SessionUser.class.equals(parameter.getParameterType());
 
@@ -32,7 +32,7 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
     public Object resolveArgument(MethodParameter parameter,
                                   ModelAndViewContainer mavContainer,
                                   NativeWebRequest webRequest,
-                                  WebDataBinderFactory binderFactory) throws Exception { // (2)
+                                  WebDataBinderFactory binderFactory) throws Exception { // 실제객체 반환
         return httpSession.getAttribute("sessionUser");
     }
 }

@@ -1,11 +1,18 @@
-spring.security.oauth2.client.registration.kakao.client-id: c3fd7ee121c229e092ecaf7a67960298
-spring.security.oauth2.client.registration.kakao.client-secret: 95i43gMteAlEXkkZvjKKyADCvsNvwkd7
 spring:
+  security.oauth2.client.registration.kakao:
+    authorization-grant-type: authorization_code
+    scope: profile,account_email
+    redirect-uri: "{baseUrl}/{action}/oauth2/code/{registrationId}"
+    client-name: Kakao
+    client-authentication-method: POST
+    client-id: c3fd7ee121c229e092ecaf7a67960298
+    client-secret: 95i43gMteAlEXkkZvjKKyADCvsNvwkd7
   mail:
-    host: smtp.gmail.com
+    host: smtp.cloudmta.net
     port: 587
-    username: heyjigi@gmail.com
-    password: zlzlemr66^^
+    protocol: smtp
+    username: e42f948c506dea73
+    password: L5EgHTwDFfaxB4FcRpH4D1s9
     properties:
       mail:
         smtp:

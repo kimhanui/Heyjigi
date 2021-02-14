@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Log
@@ -57,7 +56,7 @@ public class UserService {
     }
 
     @Transactional
-    public void cancel_participated(Long id, String oauthId) {
+    public void cancel_participated(Long id, String oauthId)  throws IllegalArgumentException{
         User user = userRepository.findByOauthId(oauthId).orElseThrow(() -> new IllegalArgumentException(("찾는 회원이 없습니다.")));
         Post post = postRepository.findById(id).orElseThrow(()->new IllegalArgumentException("찾는 글이 업습니다."));
         post.deleteGuest(user);
