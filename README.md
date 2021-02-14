@@ -3,7 +3,9 @@
 > 🎮 테스트데이터의 '내 정보/활동'보기: http://hey-jigi.herokuapp.com/my/1500000000  
 > 🚩 [Youtube 설명](https://www.youtube.com/watch?v=LpwhB6LORa8&t=263s)   
 > ☁ [Google Presentation 자료](https://docs.google.com/presentation/d/e/2PACX-1vTzu13ejPVLyEJ6x8N2DAr55OycqfXvgHF7ndgVnKh45Y8oSiYF0n1DFkGYUjsk4v7qdIv5bzwDUk6e/pub?start=true&loop=false&delayms=3000)  
-> 📜 How To Guide [Hey-Jigi Notion](https://www.notion.so/cc71d61c48a04cf0a63f34f6e0b6c30b)
+
+### 📜 How To Guide 
+[Hey-Jigi Notion](https://www.notion.so/cc71d61c48a04cf0a63f34f6e0b6c30b)
 
 ![image](https://user-images.githubusercontent.com/30483337/107876461-75ff8180-6f09-11eb-8da6-dbe50a9bb117.png)
 
