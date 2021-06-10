@@ -1,0 +1,10 @@
+{{>layout/header}}
+
+<h1>Ooops!</h1>
+<br>권한이 없습니다. 로그인 해주세요
+<span class="col-md-6">
+    {{^oauth}}
+        <a href="/oauth2/authorization/kakao" role="button" class="btn btn-primary">카카오 계정 로그인</a>
+    {{/oauth}}
+</span>
+{{>layout/footer}}e3

@@ -1,0 +1,233 @@
+{{>layout/header}}
+<h1>내 정보/활동</h1>
+<span class="col-md-2">
+    <a href="/" role="button" class="btn btn-primary">홈</a>
+</span>
+<div class="col-md-12">
+    <div class="col-md-4">
+        {{#my}}
+            <div>
+                <div class="form-group">
+                    <label for="profile">내 정보</label>
+                    <br>프로필 이미지
+                    <img style="width:150px; length:150px;" src="{{profile_image}}"/>
+                </div>
+                <div class="form-group">
+                    <label for="oauthId">
+                        oauthId: <input class="my-info" id="oauthId" style="background-color: cadetblue;"
+                                        type="text" class="form-control"
+                                        value="{{oauthId}}" readonly>
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label for="name">
+                        <br>이름:<input class="my-info" id="name" style="background-color: darkseagreen;" type="text"
+                                      class="form-control"
+                                      value="{{name}}" readonly>
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label for="name">
+                        <br>이메일:<input class="my-info" id="email" style="background-color: aquamarine;" type="text"
+                                       class="form-control"
+                                       value="{{email}}">
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label for="studentId">
+                        <br>학번:<input class="my-info" id="studentId" style="background-color: aquamarine;" type="text"
+                                      class="form-control"
+                                      value="{{studentId}}">
+                    </label>
+                </div>
+                <button id="btn-my-update">학번 수정</button>
+            </div>
+            <h2>소식 알림 설정</h2>
+            아두이노<input type="checkbox" name="arduino" value="아두이노">
+            축구/족구<input type="checkbox" name="sports" value="축구/족구">
+            전시회<input type="checkbox" name="exhibition" value="전시회">
+            스터디<input type="checkbox" name="study" value="스터디">
+
+            <div class="form-group">
+                <label for="my-host"><h2>내가 lead하는 모임</h2></label>
+                <table class="table table-horizontal table-bordered">
+                    <thead class="thead-strong">
+                    <tr>
+                        <th>제목</th>
+                        <th>필요 인원</th>
+                        <th>모집 종료일</th>
+                        <th>수정/삭제</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tbody">
+                    {{#hosted}}
+                        <tr>
+                            <td id="post-{{id}}"><a href="/post/find/{{id}}">{{title}}</a></td>
+                            <td><span style="color: orangered;">{{personNow}}</span> / {{personLimit}}</td>
+                            <td>{{endDate}}</td>
+                            <td>
+                                <button id="btn-update"><a href="/post/update/{{id}}">수정</a></button>
+                                <button id="btn-delete">삭제</button>
+                            </td>
+                        </tr>
+                        {{#participants}}
+                            <tr>
+                                <td>-</td>
+                                <td>이름:{{name}}</td>
+                                <td>학번:{{studentId}}</td>
+                                <td>이메일:{{email}})</td>
+                                <br>
+                            </tr>
+                        {{/participants}}
+
+                    {{/hosted}}
+                    </tbody>
+                </table>
+
+
+                <div class="form-group">
+                    <label for="my-guest"><h2>내가 participated 한 모임</h2></label>
+                    <table class="table table-horizontal table-bordered">
+                        <thead class="thead-strong">
+                        <tr>
+                            <th>제목</th>
+                            <th>모집 종료일</th>
+                            <th>작성자</th>
+                            <th>참여 취소</th>
+                        </tr>
+                        </thead>
+                        <tbody id="tbody">
+                        {{#registered}}
+                            <tr>
+                                <td id="post-{{id}}"><a href="/post/find/{{id}}">{{title}}</a></td>
+                                <td>{{endDate}}</td>
+                                <td>{{author}}</td>
+                                <td>
+                                    <button id="btn-cancel">참여 취소</button>
+                                </td>
+                            </tr>
+                        {{/registered}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        {{/my}}
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        console.log("init한다.");
+        setCategory = function (val) {
+            $.ajax({
+                type: 'GET',
+                url: '/api/v1/user/category/' + val,
+                dataType: 'json', //서버측에서 전송받은 데이터 타입
+                contentType: 'application/json; charset=utf-8',
+                success: function (response) {
+
+                }, error: function (error) {
+                    console.log(JSON.stringify(error));
+                }
+            })
+        };
+
+
+        $('input:checkbox').on('change', function () {
+            console.log("checkbos changed" + $(this).attr('name'));
+            if ($(this).attr('name') == 'arduino') {
+                setCategory('arduino');
+            }
+            if ($(this).attr('name') == 'sports') {
+                setCategory('sports');
+            }
+            if ($(this).attr('name') == 'exhibition') {
+                setCategory('exhibition');
+            }
+            if ($(this).attr('name') == 'study') {
+                setCategory('study');
+            }
+        })
+
+        $('#btn-my-update').on('click', function () {
+            console.log("버튼 누름");
+            updateMy();
+        });
+        $('#btn-cancel').on('click', function () {
+            var checkbtn = $(this);
+            var tr = checkbtn.parent().parent();
+            var td = tr.children();
+            var ahref = td.eq(0).attr('id').split('-')[1];
+            console.log("ahref=" + ahref);
+            cancel_participate(ahref);
+        });
+
+        $('#btn-delete').on('click', function () {
+            console.log("삭제 누름");
+            var checkbtn = $(this);
+            var tr = checkbtn.parent().parent();
+            var td = tr.children();
+            var ahref = td.eq(0).attr('id').split('-')[1];
+            remove(ahref);
+        });
+
+        updateMy = function () {
+            var data = {
+                oauthId: $('.my-info[id=oauthId]').val(), //식별용
+                name: $('.my-info[id=name]').val(),
+                email: $('.my-info[id=email]').val(),
+                studentId: $('.my-info[id=studentId]').val()
+            };
+            console.log(data);
+            $.ajax({
+                type: 'PUT',
+                url: '/api/v1/user',
+                dataType: 'json', //서버측에서 전송받은 데이터 타입
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
+                success: function (response) {
+                    alert('정보가 수정되었습니다.');
+                }, error: function (error) {
+                    console.log(JSON.stringify(error));
+                }
+            })
+        };
+
+
+        cancel_participate = function (post_id) {
+            $.ajax({
+                type: 'GET',
+                url: '/api/v1/user/cancel/' + post_id,
+                dataType: 'json', //서버측에서 전송받은 데이터 타입
+                contentType: 'application/json; charset=utf-8',
+                // data: JSON.stringify(data),
+                success: function (response) {
+                    alert('참여가 취소되었습니다.');
+                    window.location.href = '/my';
+                }, error: function (error) {
+                    console.log(JSON.stringify(error));
+                }
+            })
+        };
+
+        remove = function (ahref) {
+            $.ajax({
+                type: 'DELETE',
+                url: '/api/v1/post/' + ahref,
+                dataType: 'json', //서버측에서 전송받은 데이터 타입
+                contentType: 'application/json; charset=utf-8',
+                // data: JSON.stringify(data),
+                success: function (response) {
+                    alert('글이 삭제되었습니다.');
+                    window.location.href = '/';
+                }, error: function (error) {
+                    alert(JSON.stringify(error));
+                }
+            })
+        };
+    });
+</script>
+{{>layout/footer}}

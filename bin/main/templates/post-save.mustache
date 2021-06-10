@@ -1,0 +1,88 @@
+{{>layout/header}}
+<h1>모임 등록</h1>
+<div class="col-md-12">
+    <div class="col-md-4">
+        <form>
+            {{#sessionUser}}
+                <div class="form-group">
+                    <label for="title">제목</label>
+                    <input type="text" class="form-control" id="title" placeholder="제목을 입력하세요" required>
+                </div>
+                <div class="form-group">
+                    <label for="endDate">모집 종료일</label>
+                    <input type="text" class="form-control" id="endDate" placeholder="ex) 2020-11-24" required>
+                </div>
+                <div class="form-group">
+                    카테고리
+                    <br>
+                    <input type="radio" name="rawCategoryEnum" value="arduino" checked>아두이노 부품 공구</label>
+                    <input type="radio" name="rawCategoryEnum" value="sports">축구/족구</label>
+                    <input type="radio" name="rawCategoryEnum" value="exhibition">코엑스 전시회</label>
+                    <input type="radio" name="rawCategoryEnum" value="study">공모전 참여</label>
+
+                </div>
+                <div class="form-group">
+                    <label for="personLimit">머릿수</label>
+                    <input type="text" class="form-control" id="personLimit" placeholder="ex) 3" required>
+                </div>
+                <div class="form-group">
+                    <label for="author">작성자</label>
+                    <input type="text" class="form-control" value="{{name}}" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="content">내용</label>
+                    <textarea class="form-control" id="content" placeholder="내용을 입력하세요."></textarea>
+                </div>
+            {{/sessionUser}}
+            <a href="/" role="button" class="btn btn-secondary">취소</a>
+            <button type="button" class="btn btn-primary" id="btn-save">등록</button>
+        </form>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        console.log("init한다.");
+        console.log($('input[type=hidden]').attr('name') + ", " + $('input[type=hidden]').attr('value'));
+        $('#btn-save').on('click', function () {
+            console.log("버튼 누름");
+            if ($('#title').val() == ''||  $('#endDate').val()==''||
+                    $('#personLimit').val()=='' || $('#content').val()=='') {
+                alert("모든 항목을 채워주세요");
+            }
+            else save();
+        });
+
+        save = function () {
+            var checked = $('input[name="rawCategoryEnum"]:checked').val();
+
+            var data = {
+                title: $('#title').val(),
+                endDate: $('#endDate').val(),
+                personLimit: $('#personLimit').val(),
+                rawCategoryEnum: checked,
+                content: $('#content').val(),
+            };
+
+            $.ajax({
+                type: 'POST',
+                url: '/api/v1/post',
+                dataType: 'json', //서버측에서 전송받은 데이터 타입
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
+                success: function (response) {
+                    alert('글이 등록되었습니다.');
+                    window.location.href = '/'; //js에서 url로 페이지 이동방법(cf. 페이지 이름으로 이동)
+
+                }, error: function (error) {
+                    alert('error 발생:' +error);
+                }
+            })
+        }
+    });
+
+
+</script>
+{{>layout/footer}}

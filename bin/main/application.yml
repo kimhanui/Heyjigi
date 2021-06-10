@@ -1,0 +1,44 @@
+spring:
+  profiles:
+    active: local
+
+---
+spring.profiles: local
+spring.profiles.include: oauth
+
+  # hikari
+spring:
+  datasource:
+    platform: h2
+    hikari:
+      jdbc-url: jdbc:h2:mem:testdb;MVCC=TRUE
+      username: sa
+      password:
+      driver-class-name: org.h2.Driver
+  h2:
+    console:
+      enabled: true
+      path: /h2-heyjigi
+      settings:
+        web-allow-others: true
+
+  # jpa
+  jpa:
+    database-platform: H2
+    show-sql: false
+    hibernate:
+      ddl-auto: create-drop
+
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+
+
+
+  mustache:
+    expose-request-attributes: true
+#server:
+#  error:
+#    whitelabel.enabled: true
+#    include-stacktrace: always # 오류 응답에 stacktrace 내용을 포함할지 여부
+#    include-exception: false # 오류 응답에 exception의 내용을 포함할지 여부
