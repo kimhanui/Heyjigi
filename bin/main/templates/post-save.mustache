@@ -1,0 +1,106 @@
+<link href="/css/post.css" rel="stylesheet"/>
+<link href="/css/master.css" rel="stylesheet"/>
+<link href="/css/header.css" rel="stylesheet"/>
+
+{{>layout/header}}
+<header>
+    <div class="logo">
+        <a href="/">Hey Jigi</a>
+    </div>
+    <div class="profile-list">
+        {{#sessionUser}}
+            <a href="/my" role="button" class="btn btn-primary">내 정보/활동</a>
+        {{/sessionUser}}
+        {{^sessionUser}}
+            <a href="/oauth2/authorization/kakao" role="button" class="kakao-login">카카오 계정 로그인</a>
+        {{/sessionUser}}
+        {{#sessionUser}}<!-- oauth 세션이 있을 때-->
+            <a href="/logout" role="button" class="btn btn-primary">로그아웃</a>
+        {{/sessionUser}}
+        {{#sessionUser}}
+            <a href="/post/save"><button>글쓰기</button></a>
+        {{/sessionUser}}
+    </div>
+</header>
+<main>
+    <h3>모임 추가</h3>
+    {{#sessionUser}}
+    <div class="input-raw">
+        <label for="title">제목</label>
+        <input type="text" class="form-control" id="title" placeholder="제목을 입력하세요" required>
+    </div>
+    <div class="input-raw">
+        <label for="endDate">모집 종료일</label>
+        <input type="text" class="form-control" id="endDate" placeholder="ex) 2020-11-24" required>
+    </div>
+    <div class="input-raw">
+        <label>카테고리</label>
+        <div class="input-group">
+            <input type="radio" name="rawCategoryEnum" value="arduino" checked>아두이노 부품 공구</label>
+            <input type="radio" name="rawCategoryEnum" value="sports">축구/족구</label>
+            <input type="radio" name="rawCategoryEnum" value="exhibition">코엑스 전시회</label>
+            <input type="radio" name="rawCategoryEnum" value="study">공모전 참여</label>
+        </div>
+    </div>
+    <div class="input-raw">
+        <label for="personLimit">머릿수</label>
+        <input type="text" class="form-control" id="personLimit" placeholder="ex) 3" required>
+    </div>
+    <div class="input-raw">
+        <label for="author">작성자</label>
+        <input type="text" class="form-control" value="{{name}}" readonly>
+    </div>
+    <div class="input-raw">
+        <label for="content">내용</label>
+        <textarea class="form-control" id="content" placeholder="내용을 입력하세요."></textarea>
+    </div>
+    <div class="button-group">
+        <button type="button" class="secondary" id="cancel-button">취소</button>
+        <button type="button" class="primary" id="register-button">등록</button>
+    </div>
+    {{/sessionUser}}
+</main>
+<script type="text/javascript">
+    const onClickSaveButton = async (e) => {
+        const title = document.getElementById('title');
+        const endDate = document.getElementById('endDate');
+        const personLimit = document.getElementById('personLimit');
+        const content = document.getElementById('content');
+
+        if ( title.value === '' || endDate.value == '' || personLimit.value == '' || content.value === ''){
+            window.alert('모든 항목을 채워주세요');
+            return;
+        }
+
+        const data = {
+            title: title.value,
+            endDate: endDate.value,
+            personLimit: personLimit.value,
+            // rawCategoryEnum: checked,
+            content: content.value,
+        };
+
+        try{
+            await fetch('/api/v1/post', {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers:{
+                    'Content-Type': 'application/json'
+                },
+            });
+            window.location.href = '/'
+        }catch (e){
+            console.log(e);
+        }
+    }
+    window.onload = () => {
+        const registerButton = document.getElementById('register-button');
+        const cancelButton = document.getElementById('cancel-button');
+
+        registerButton.addEventListener('click', onClickSaveButton);
+        cancelButton.addEventListener('click', () => {
+            window.location.href = '/';
+        });
+    }
+</script>
+{{>layout/footer}}

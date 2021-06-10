@@ -1,0 +1,112 @@
+<link href="./css/home.css" rel="stylesheet"/>
+<link href="./css/master.css" rel="stylesheet"/>
+<link href="./css/header.css" rel="stylesheet"/>
+
+{{>layout/header}} {{! 현재 머스테치 파일을 기준으로 다른 파일을 가져옴}}
+<header>
+    <div class="logo">
+        Hey Jigi
+    </div>
+    <div class="profile-list">
+        {{#sessionUser}}
+            <a href="/my" role="button" class="btn btn-primary">내 정보/활동</a>
+        {{/sessionUser}}
+        {{^sessionUser}}
+            <a href="/oauth2/authorization/kakao" role="button" class="kakao-login">카카오 계정 로그인</a>
+        {{/sessionUser}}
+        {{#sessionUser}}<!-- oauth 세션이 있을 때-->
+            <a href="/logout" role="button" class="btn btn-primary">로그아웃</a>
+        {{/sessionUser}}
+        {{#sessionUser}}
+            <a href="/post/save"><button>글쓰기</button></a>
+        {{/sessionUser}}
+    </div>
+</header>
+<main>
+    <h3>
+        모임 목록
+    </h3>
+    <div class="tab-list">
+        <div class="tab active" name="arduino">
+            부품 공구
+        </div>
+        <div class="tab" name="sports">
+            축구/족구
+        </div>
+        <div class="tab" name="exhibition">
+            코엑스 전시회
+        </div>
+        <div class="tab" name="study">
+            공모전 참여
+        </div>
+    </div>
+    <div class="card-list" id="card-list">
+        {{#posts}}
+            <a class="card" href="/post/find/{{id}}">
+                <div class="title">
+                    {{title}}
+                </div>
+                <div class="author">
+                    {{author}}
+                </div>
+                <div class="bottom">
+                    <span class="date">
+                        {{endDate}}
+                    </span>
+                    <span class="member">
+                        <b>{{personNow}}</b> / {{personLimit}}
+                    </span>
+                </div>
+            </a>
+        {{/posts}}
+    </div>
+</main>
+
+<script type="text/javascript">
+    const getPostList = async (categoryName) => {
+        try{
+            const resp = await fetch(`/api/v1/post/list/${categoryName}`);
+            const posts = await resp.json();
+
+            const postList = posts.map((json) => {
+                const {id, title, author, endDate, personLimit, personNow} = json;
+                return `
+                        <a class="card" href="/post/find/${id}">
+                            <div class="title">
+                                ${title}
+                            </div>
+                            <div class="author">
+                                ${author}
+                            </div>
+                            <div class="bottom">
+                                <span class="date">
+                                    ${endDate}
+                                </span>
+                                <span class="member">
+                                    <b>${personNow}</b> / ${personLimit}
+                                </span>
+                            </div>
+                        </a>
+                    `
+            });
+            document.getElementById('card-list').innerHTML = postList;
+        }catch(e){
+            console.log(e);
+        }
+    }
+    const onClickTabButton = (e) => {
+        const name = e.target.getAttribute('name')
+        getPostList(name);
+    }
+    window.onload = () => {
+        const tab = document.getElementsByClassName('tab');
+
+        for(let i=0; i<tab.length; i++){
+            tab[i].addEventListener('click', onClickTabButton);
+        }
+    }
+</script>
+
+
+
+{{>layout/footer}}

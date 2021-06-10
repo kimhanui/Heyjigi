@@ -1,0 +1,119 @@
+<link href="/css/post.css" rel="stylesheet"/>
+<link href="/css/master.css" rel="stylesheet"/>
+<link href="/css/header.css" rel="stylesheet"/>
+
+{{>layout/header}}
+<header>
+    <div class="logo">
+        <a href="/">Hey Jigi</a>
+    </div>
+    <div class="profile-list">
+        {{#sessionUser}}
+            <a href="/my" role="button" class="btn btn-primary">내 정보/활동</a>
+        {{/sessionUser}}
+        {{^sessionUser}}
+            <a href="/oauth2/authorization/kakao" role="button" class="kakao-login">카카오 계정 로그인</a>
+        {{/sessionUser}}
+        {{#sessionUser}}<!-- oauth 세션이 있을 때-->
+            <a href="/logout" role="button" class="btn btn-primary">로그아웃</a>
+        {{/sessionUser}}
+        {{#sessionUser}}
+            <a href="/post/save"><button>글쓰기</button></a>
+        {{/sessionUser}}
+    </div>
+</header>
+{{#post}}
+<main>
+    <h3>모임 참여하기</h3>
+    <div class="input-raw">
+        <label for="title">제목</label>
+        <input type="text" class="form-control" id="title" placeholder="제목을 입력하세요" required value="{{title}}"/>
+    </div>
+    <div class="input-raw">
+        <label for="endDate">모집 종료일</label>
+        <input type="text" value="{{endDate}}" class="form-control" id="endDate" placeholder="ex) 2020-11-24" required>
+    </div>
+    <div class="input-raw">
+        <label>카테고리</label>
+        <div class="input-group">
+            <input type="radio" name="rawCategoryEnum" value="arduino" checked>아두이노 부품 공구</label>
+            <input type="radio" name="rawCategoryEnum" value="sports">축구/족구</label>
+            <input type="radio" name="rawCategoryEnum" value="exhibition">코엑스 전시회</label>
+            <input type="radio" name="rawCategoryEnum" value="study">공모전 참여</label>
+        </div>
+    </div>
+    <div class="input-raw">
+        <label for="personLimit">머릿수</label>
+        <input type="text" value="{{personNow}} / {{personLimit}}" class="form-control" id="personLimit" placeholder="ex) 3" required>
+    </div>
+    <div class="input-raw">
+        <label for="author">작성자</label>
+        <input id='author' type="text" class="form-control" value="{{author}}" readonly>
+    </div>
+    <div class="input-raw">
+        <label for="content">내용</label>
+        <textarea class="form-control" id="content" placeholder="내용을 입력하세요.">{{content}}</textarea>
+    </div>
+    <div class="button-group">
+        {{#isGuest}}
+            <button type="button" class="primary" id="participate-button">참여하기</button>
+        {{/isGuest}}
+        {{#isHost}}
+            <a href="/post/update/{{post.id}}"><button type="button" class="primary" id="update-button">수정</button></a>
+            <button type="button" class="primary" id="delete-button">삭제</button>
+        {{/isHost}}
+    </div>
+</main>
+{{/post}}
+
+<script type="text/javascript">
+    window.onload = () => {
+        const participateButton = document.getElementById('participate-button');
+        const updateButton = document.getElementById('update-button');
+        const deleteButton = document.getElementById('delete-button');
+
+        participateButton.addEventListener('click', onClickParticipate);
+        updateButton.addEventListener('click', onClickUpdate);
+        deleteButton.addEventListener('click', onClickDelete);
+    }
+
+    const onClickParticipate = async (e) => {
+        try{
+            await fetch(`/api/v1/post/{{post.id}}`,
+                    {method: 'PUT'}
+            );
+            alert('참가신청이 완료되었습니다.');
+        }catch(e){
+            console.log(e);
+        }
+    }
+
+    const onClickUpdate = async (e) => {
+        const data = {
+            title: document.getElementById('title').value,
+            endDate: document.getElementById('endDate').value,
+            personLimit: document.getElementById('personLimit').value,
+            content: document.getElementById('content').value,
+        };
+        try{
+            await fetch(`/api/v1/post/{{post.id}}`, {
+                method: 'PUT',
+                body: JSON.stringify(data)
+            });
+        }catch(e){
+            console.log(e);
+        }
+    }
+
+    const onClickDelete = async (e) => {
+        try{
+            await fetch(`/api/v1/post/{{post.id}}`);
+            alert('글이 삭제되었습니다.');
+            //TODO: 이런식으로 라우팅 옮기는 방법이 마음에 안듭니다.
+            window.location.href = '/';
+        }catch(e){
+            console.log(e);
+        }
+    }
+</script>
+{{>layout/footer}}

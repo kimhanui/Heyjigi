@@ -1,0 +1,55 @@
+main{
+    display: block;
+    padding: 2rem;
+}
+main h3{
+    font-size: 20px;
+}
+main .input-raw{
+    display: flex;
+    flex-direction: column;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+main .input-raw .input-group{
+    display: flex;
+    flex-direction: row;
+}
+main .input-raw label{
+    font-weight: bold;
+    font-size: 13px;
+    margin-bottom: .25rem;
+}
+main .input-raw input, textarea{
+    outline: none;
+    padding: 11px 16px;
+    border: 1px solid #222;
+    font-size: 15px;
+    border-radius: 4px;
+}
+
+main .button-group{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+main .button-group .primary{
+    background: rgb(163, 89, 185);
+    color : white;
+}
+
+main .button-group .secondary{
+    background: #dedede;
+    color : #222;
+}
+
+main .button-group button{
+    margin-right: .5rem;
+    border : none;
+    border-radius : 4px;
+    font-size : 1rem;
+    font-weight : bold;
+    padding : 11px 21px;
+    outline : none;
+    cursor: pointer;
+}
